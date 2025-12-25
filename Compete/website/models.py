@@ -19,6 +19,12 @@ class SolvedChallenge(models.Model):
     class Meta:
         unique_together = ('user', 'challenge_type', 'challenge_id')
         ordering = ['-solved_at']
+        indexes = [
+            models.Index(fields=['user', 'challenge_type']),
+            models.Index(fields=['challenge_type', 'challenge_id']),
+            models.Index(fields=['solved_at']),
+            models.Index(fields=['user', '-solved_at']),
+        ]
     
     def __str__(self):
         return f"{self.user.username} - {self.challenge_title}"

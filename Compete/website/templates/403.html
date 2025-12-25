@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}403 - Forbidden{% endblock %}
+
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui middle aligned center aligned grid" style="min-height: 500px;">
+        <div class="column" style="max-width: 600px;">
+            <div class="ui segment ctf-card">
+                <h1 class="ui orange header" style="font-size: 4em; margin-bottom: 20px;">
+                    <i class="ban icon"></i>
+                    403
+                </h1>
+                
+                <h2 class="ui header" style="margin-bottom: 30px;">
+                    <div class="content">
+                        Access Forbidden
+                        <div class="sub header">You don't have permission to access this resource.</div>
+                    </div>
+                </h2>
+
+                <div class="ui warning message">
+                    <div class="header">Access Denied</div>
+                    <p>You don't have the necessary permissions to view this page.</p>
+                </div>
+
+                <div class="ui message">
+                    <p>If you believe this is an error, please contact the site administrator or try logging in with a different account.</p>
+                </div>
+
+                <div class="ui buttons" style="margin-top: 30px;">
+                    <a href="{% url 'home' %}" class="ui primary button">
+                        <i class="home icon"></i>
+                        Go Home
+                    </a>
+                    <div class="or"></div>
+                    <a href="{% url 'login' %}" class="ui button">
+                        <i class="sign in icon"></i>
+                        Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

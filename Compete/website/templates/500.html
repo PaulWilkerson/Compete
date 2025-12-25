@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}500 - Server Error{% endblock %}
+
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui middle aligned center aligned grid" style="min-height: 500px;">
+        <div class="column" style="max-width: 600px;">
+            <div class="ui segment ctf-card">
+                <h1 class="ui red header" style="font-size: 4em; margin-bottom: 20px;">
+                    <i class="exclamation circle icon"></i>
+                    500
+                </h1>
+                
+                <h2 class="ui header" style="margin-bottom: 30px;">
+                    <div class="content">
+                        Internal Server Error
+                        <div class="sub header">Something went wrong on our end.</div>
+                    </div>
+                </h2>
+
+                <div class="ui error message">
+                    <div class="header">Oops!</div>
+                    <p>We're experiencing technical difficulties. Our team has been notified and is working to fix the issue.</p>
+                </div>
+
+                <div class="ui info message">
+                    <i class="info circle icon"></i>
+                    <strong>What you can do:</strong>
+                    <ul style="margin-top: 10px; text-align: left;">
+                        <li>Try refreshing the page</li>
+                        <li>Go back to the previous page</li>
+                        <li>Return to the home page</li>
+                        <li>Contact support if the problem persists</li>
+                    </ul>
+                </div>
+
+                <div class="ui buttons" style="margin-top: 30px;">
+                    <a href="{% url 'home' %}" class="ui primary button">
+                        <i class="home icon"></i>
+                        Go Home
+                    </a>
+                    <div class="or"></div>
+                    <a href="javascript:location.reload()" class="ui button">
+                        <i class="refresh icon"></i>
+                        Refresh
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
