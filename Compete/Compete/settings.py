@@ -127,7 +127,7 @@ if config('USE_POSTGRESQL', default=True, cast=bool):
             "USER": config('DB_USER', default='postgres'),
             "PASSWORD": config('DB_PASSWORD', default='Pfw02967+890,/'),
             "HOST": config('DB_HOST', default='localhost'),
-            "PORT": config('DB_PORT', default='5432'),
+            "PORT": config('DB_PORT', default=5432, cast=int),
             'CONN_MAX_AGE': 600,
             'OPTIONS': {
                 'connect_timeout': 10,
@@ -223,6 +223,10 @@ SECURE_REFERRER_POLICY = config('SECURE_REFERRER_POLICY', default='same-origin')
 SECURE_BROWSER_XSS_FILTER = config('SECURE_BROWSER_XSS_FILTER', default=True, cast=bool)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+# Ensure logs directory exists
+LOGS_DIR = os.path.join(BASE_DIR, 'logs')
+os.makedirs(LOGS_DIR, exist_ok=True)
+
 # Logging Configuration
 LOGGING = {
     'version': 1,
@@ -255,7 +259,7 @@ LOGGING = {
         'file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'django_error.log'),
+            'filename': os.path.join(LOGS_DIR, 'django_error.log'),
             'formatter': 'verbose',
         },
         'mail_admins': {
