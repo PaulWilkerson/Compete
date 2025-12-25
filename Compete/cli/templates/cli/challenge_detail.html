@@ -1,0 +1,282 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ challenge.title }} - Compete CTF{% endblock %}
+
+{% block content %}
+<div class="ui container main-container">
+    <!-- Breadcrumb -->
+    <div class="ui breadcrumb" style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+        <a href="{% url 'home' %}" class="section">Home</a>
+        <i class="right angle icon divider"></i>
+        <a href="{% url 'cli_challenge_list' %}" class="section">CLI Challenges</a>
+        <i class="right angle icon divider"></i>
+        <div class="active section">{{ challenge.title }}</div>
+    </div>
+
+    <!-- Challenge Header -->
+    <div class="ui segment ctf-card">
+        <div class="ui stackable grid">
+            <div class="twelve wide column">
+                <h1 class="ui header">
+                    <i class="terminal icon blue"></i>
+                    {{ challenge.title }}
+                </h1>
+                <div class="ui labels" style="margin-top: 15px;">
+                    {% if challenge.difficulty == 'Easy' %}
+                        <span class="ui large green label">
+                            <i class="signal icon"></i> {{ challenge.difficulty }}
+                        </span>
+                    {% elif challenge.difficulty == 'Medium' %}
+                        <span class="ui large orange label">
+                            <i class="signal icon"></i> {{ challenge.difficulty }}
+                        </span>
+                    {% else %}
+                        <span class="ui large red label">
+                            <i class="signal icon"></i> {{ challenge.difficulty }}
+                        </span>
+                    {% endif %}
+                    
+                    <span class="ui large teal label">
+                        <i class="terminal icon"></i> {{ challenge.category }}
+                    </span>
+                    
+                    <span class="ui large label">
+                        <i class="trophy icon"></i> 100 Points
+                    </span>
+                </div>
+            </div>
+            <div class="four wide column right aligned">
+                <div class="ui statistic">
+                    <div class="value">
+                        <i class="users icon"></i> 0
+                    </div>
+                    <div class="label">Solves</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui stackable grid" style="margin-top: 20px;">
+        <!-- Challenge Description -->
+        <div class="eleven wide column">
+            <div class="ui segment ctf-card">
+                <h2 class="ui header">
+                    <i class="info circle icon"></i>
+                    Challenge Description
+                </h2>
+                <div class="ui divider"></div>
+                <div style="line-height: 1.8; font-size: 1.1em;">
+                    {{ challenge.description|linebreaks }}
+                </div>
+            </div>
+
+            <!-- Terminal Emulator -->
+            <div class="ui segment ctf-card" style="margin-top: 20px; background: #1e1e1e;">
+                <h3 class="ui header" style="color: white;">
+                    <i class="terminal icon"></i>
+                    Terminal Emulator
+                </h3>
+                <div class="ui divider" style="border-color: #444;"></div>
+                <div id="terminal" style="background: #000; color: #00ff00; padding: 15px; font-family: 'Courier New', monospace; min-height: 300px; border-radius: 5px; overflow-y: auto;">
+                    <div id="terminalOutput">
+                        <span style="color: #00ff00;">user@compete:~$</span> <span id="commandInput" contenteditable="true" style="outline: none;"></span>
+                    </div>
+                </div>
+                <div class="ui message" style="margin-top: 15px;">
+                    <i class="info circle icon"></i>
+                    <strong>Quick Commands:</strong> ls, cd, cat, grep, pwd, echo
+                    <br><small>(Note: This is a simulated terminal for demonstration purposes)</small>
+                </div>
+            </div>
+
+            <!-- Submit Flag -->
+            <div class="ui segment ctf-card" style="margin-top: 20px;">
+                <h3 class="ui header">
+                    <i class="flag icon"></i>
+                    Submit Flag
+                </h3>
+                <div class="ui divider"></div>
+                <form class="ui form" method="post" id="flagForm">
+                    {% csrf_token %}
+                    <div class="field">
+                        <label>Enter the flag you discovered:</label>
+                        <div class="ui action input">
+                            <input type="text" name="flag" placeholder="flag{...}" required>
+                            <button class="ui primary button" type="submit">
+                                <i class="paper plane icon"></i>
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="ui message" style="margin-top: 15px;">
+                    <i class="info circle icon"></i>
+                    Flags are case-sensitive and should be submitted exactly as found.
+                </div>
+            </div>
+
+            <!-- Hints Section -->
+            <div class="ui segment ctf-card" style="margin-top: 20px;">
+                <h3 class="ui header">
+                    <i class="lightbulb icon"></i>
+                    Hints
+                </h3>
+                <div class="ui divider"></div>
+                <div class="ui message">
+                    <p><strong>Hint 1:</strong> Try exploring common {{ challenge.category }} commands.</p>
+                </div>
+                <div class="ui message">
+                    <p><strong>Hint 2:</strong> Look for hidden files or directories.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="five wide column">
+            <!-- Challenge Info -->
+            <div class="ui segment ctf-card">
+                <h3 class="ui header">
+                    <i class="chart bar icon"></i>
+                    Challenge Stats
+                </h3>
+                <div class="ui divider"></div>
+                <div class="ui list">
+                    <div class="item">
+                        <i class="trophy icon"></i>
+                        <div class="content">
+                            <div class="header">Points</div>
+                            100
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="users icon"></i>
+                        <div class="content">
+                            <div class="header">Total Solves</div>
+                            0
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="calendar icon"></i>
+                        <div class="content">
+                            <div class="header">Created</div>
+                            Recently
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="star icon"></i>
+                        <div class="content">
+                            <div class="header">Difficulty</div>
+                            {{ challenge.difficulty }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Command Reference -->
+            <div class="ui segment ctf-card" style="margin-top: 20px;">
+                <h3 class="ui header">
+                    <i class="book icon"></i>
+                    Command Reference
+                </h3>
+                <div class="ui divider"></div>
+                <div class="ui relaxed list">
+                    <div class="item">
+                        <strong>ls</strong> - List directory contents
+                    </div>
+                    <div class="item">
+                        <strong>cd</strong> - Change directory
+                    </div>
+                    <div class="item">
+                        <strong>cat</strong> - Display file contents
+                    </div>
+                    <div class="item">
+                        <strong>grep</strong> - Search text patterns
+                    </div>
+                    <div class="item">
+                        <strong>pwd</strong> - Print working directory
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="ui segment ctf-card" style="margin-top: 20px;">
+                <a href="{% url 'cli_challenge_list' %}" class="ui fluid button">
+                    <i class="arrow left icon"></i>
+                    Back to Challenges
+                </a>
+                {% if user.is_staff %}
+                    <a href="#" class="ui fluid red button" style="margin-top: 10px;">
+                        <i class="trash icon"></i>
+                        Delete Challenge
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    var commandHistory = [];
+    
+    $('#commandInput').on('keypress', function(e) {
+        if (e.which === 13) { // Enter key
+            e.preventDefault();
+            var command = $(this).text().trim();
+            
+            if (command) {
+                commandHistory.push(command);
+                var output = executeCommand(command);
+                $('#terminalOutput').append('<br><span style="color: #00ff00;">user@compete:~$</span> ' + command);
+                if (output) {
+                    $('#terminalOutput').append('<br>' + output);
+                }
+                $('#terminalOutput').append('<br><span style="color: #00ff00;">user@compete:~$</span> <span id="commandInput" contenteditable="true" style="outline: none;"></span>');
+                $(this).remove();
+                $('#commandInput').focus();
+                $('#terminal').scrollTop($('#terminal')[0].scrollHeight);
+            }
+        }
+    });
+    
+    function executeCommand(cmd) {
+        var parts = cmd.split(' ');
+        var command = parts[0];
+        
+        switch(command) {
+            case 'ls':
+                return 'file1.txt  file2.txt  secret/';
+            case 'pwd':
+                return '/home/user';
+            case 'whoami':
+                return 'user';
+            case 'echo':
+                return parts.slice(1).join(' ');
+            case 'help':
+                return 'Available commands: ls, pwd, whoami, echo, help, clear';
+            case 'clear':
+                $('#terminalOutput').html('<span style="color: #00ff00;">user@compete:~$</span> <span id="commandInput" contenteditable="true" style="outline: none;"></span>');
+                $('#commandInput').focus();
+                return '';
+            default:
+                return command + ': command not found';
+        }
+    }
+    
+    $('#commandInput').focus();
+    
+    $('#flagForm').submit(function(e) {
+        e.preventDefault();
+        var flag = $('input[name="flag"]').val();
+        
+        if (flag === '{{ challenge.flag }}') {
+            alert('Congratulations! You solved the challenge!');
+        } else {
+            alert('Incorrect flag. Try again!');
+        }
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}

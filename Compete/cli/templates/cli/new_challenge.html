@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block title %}Create New CLI Challenge - Compete CTF{% endblock %}
+
+{% block content %}
+<div class="ui container main-container">
+    <!-- Breadcrumb -->
+    <div class="ui breadcrumb" style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+        <a href="{% url 'home' %}" class="section">Home</a>
+        <i class="right angle icon divider"></i>
+        <a href="{% url 'cli_challenge_list' %}" class="section">CLI Challenges</a>
+        <i class="right angle icon divider"></i>
+        <div class="active section">New Challenge</div>
+    </div>
+
+    <div class="ui middle aligned center aligned grid">
+        <div class="column" style="max-width: 800px;">
+            <div class="ui segment ctf-card">
+                <h2 class="ui primary header" style="margin-bottom: 30px;">
+                    <i class="plus icon"></i>
+                    <div class="content">
+                        Create New CLI Challenge
+                        <div class="sub header">Add a new command-line challenge for competitors to solve</div>
+                    </div>
+                </h2>
+
+                {% if form.errors %}
+                    <div class="ui error message">
+                        <div class="header">Form Error</div>
+                        <ul class="list">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <form method="post" action="{% url 'cli_new_challenge' %}" class="ui large form">
+                    {% csrf_token %}
+                    <div class="ui stacked segment" style="text-align: left;">
+                        <div class="field">
+                            <label>
+                                <i class="heading icon"></i>
+                                Challenge Title
+                            </label>
+                            {{ form.title }}
+                            {% if form.title.errors %}
+                                <div class="ui pointing red basic label">
+                                    {{ form.title.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="two fields">
+                            <div class="field">
+                                <label>
+                                    <i class="terminal icon"></i>
+                                    Platform
+                                </label>
+                                {{ form.category }}
+                                {% if form.category.errors %}
+                                    <div class="ui pointing red basic label">
+                                        {{ form.category.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="field">
+                                <label>
+                                    <i class="signal icon"></i>
+                                    Difficulty
+                                </label>
+                                {{ form.difficulty }}
+                                {% if form.difficulty.errors %}
+                                    <div class="ui pointing red basic label">
+                                        {{ form.difficulty.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="field">
+                            <label>
+                                <i class="align left icon"></i>
+                                Challenge Description
+                            </label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="ui pointing red basic label">
+                                    {{ form.description.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="field">
+                            <label>
+                                <i class="flag icon"></i>
+                                Flag (Secret)
+                            </label>
+                            <input type="text" name="flag" placeholder="flag{example_flag_here}" required>
+                            <small style="opacity: 0.7;">
+                                <i class="info circle icon"></i>
+                                This is the correct answer competitors must find. Keep it secret!
+                            </small>
+                        </div>
+
+                        <div class="ui divider"></div>
+
+                        <button type="submit" class="ui fluid large primary submit button">
+                            <i class="check icon"></i>
+                            Create Challenge
+                        </button>
+                        
+                        <a href="{% url 'cli_challenge_list' %}" class="ui fluid large button" style="margin-top: 10px;">
+                            <i class="cancel icon"></i>
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+
+                <div class="ui info message" style="margin-top: 20px;">
+                    <div class="header">
+                        <i class="lightbulb icon"></i>
+                        Tips for Creating Good CLI Challenges
+                    </div>
+                    <ul class="list">
+                        <li>Focus on practical command-line skills</li>
+                        <li>Include realistic scenarios</li>
+                        <li>Test commands on the target platform</li>
+                        <li>Provide hints for complex command chains</li>
+                        <li>Consider security implications</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    $('select[name="category"]').parent().addClass('ui dropdown');
+    $('select[name="difficulty"]').parent().addClass('ui dropdown');
+    $('.ui.dropdown').dropdown();
+    
+    // Auto-resize textarea
+    $('textarea[name="description"]').css({
+        'min-height': '150px',
+        'resize': 'vertical'
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% block title %}Programming Challenges - Compete CTF{% endblock %}
+
+{% block content %}
+<div class="ui container main-container">
+    <!-- Header Section -->
+    <div class="ui segment ctf-card">
+        <div class="ui stackable grid">
+            <div class="twelve wide column">
+                <h1 class="ui header">
+                    <i class="code icon green"></i>
+                    <div class="content">
+                        Programming Challenges
+                        <div class="sub header">Master programming concepts and algorithms</div>
+                    </div>
+                </h1>
+            </div>
+            <div class="four wide column right aligned">
+                {% if user.is_staff %}
+                    <a href="{% url 'programming_new_challenge' %}" class="ui primary button">
+                        <i class="plus icon"></i>
+                        New Challenge
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="ui segment ctf-card" style="margin-top: 20px;">
+        <form class="ui form">
+            <div class="three fields">
+                <div class="field">
+                    <label>Difficulty</label>
+                    <select class="ui dropdown" id="difficultyFilter">
+                        <option value="">All Difficulties</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Language</label>
+                    <select class="ui dropdown" id="categoryFilter">
+                        <option value="">All Languages</option>
+                        <option value="Python">Python</option>
+                        <option value="JavaScript">JavaScript</option>
+                        <option value="C++">C++</option>
+                        <option value="Java">Java</option>
+                        <option value="Miscellaneous">Miscellaneous</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Search</label>
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search challenges..." id="searchBox">
+                        <i class="search icon"></i>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Stats -->
+    <div class="ui three column stackable grid" style="margin-top: 20px;">
+        <div class="column">
+            <div class="ui segment ctf-card center aligned">
+                <div class="ui statistic">
+                    <div class="value">{{ challenges.count }}</div>
+                    <div class="label">Total Challenges</div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="ui segment ctf-card center aligned">
+                <div class="ui statistic">
+                    <div class="value">0</div>
+                    <div class="label">Solved</div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="ui segment ctf-card center aligned">
+                <div class="ui statistic">
+                    <div class="value">{{ challenges.count }}</div>
+                    <div class="label">Remaining</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Challenges List -->
+    <div class="ui segment ctf-card" style="margin-top: 20px;">
+        <h2 class="ui header">
+            <i class="list icon"></i>
+            Available Challenges
+        </h2>
+        <div class="ui divider"></div>
+
+        {% if challenges %}
+            <div class="ui three stackable cards">
+                {% for challenge in challenges %}
+                <div class="card challenge-card" data-difficulty="{{ challenge.difficulty }}" data-category="{{ challenge.category }}">
+                    <div class="content">
+                        <div class="header">
+                            {{ challenge.title }}
+                            <div class="ui right floated">
+                                {% if challenge.difficulty == 'Easy' %}
+                                    <span class="ui green label">{{ challenge.difficulty }}</span>
+                                {% elif challenge.difficulty == 'Medium' %}
+                                    <span class="ui orange label">{{ challenge.difficulty }}</span>
+                                {% else %}
+                                    <span class="ui red label">{{ challenge.difficulty }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="meta">
+                            <i class="code icon"></i>
+                            {{ challenge.category }}
+                        </div>
+                        <div class="description">
+                            {{ challenge.description|truncatewords:20 }}
+                        </div>
+                    </div>
+                    <div class="extra content">
+                        <div class="ui two buttons">
+                            <a href="{% url 'programming_challenge_detail' challenge.id %}" class="ui primary button">
+                                <i class="eye icon"></i>
+                                View Challenge
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="ui icon message">
+                <i class="inbox icon"></i>
+                <div class="content">
+                    <div class="header">No Challenges Yet</div>
+                    <p>There are currently no programming challenges available. Check back soon!</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    $('.ui.dropdown').dropdown();
+    
+    // Filter functionality
+    function filterChallenges() {
+        var difficulty = $('#difficultyFilter').val().toLowerCase();
+        var category = $('#categoryFilter').val().toLowerCase();
+        var search = $('#searchBox').val().toLowerCase();
+        
+        $('.challenge-card').each(function() {
+            var card = $(this);
+            var cardDifficulty = card.data('difficulty').toLowerCase();
+            var cardCategory = card.data('category').toLowerCase();
+            var cardText = card.text().toLowerCase();
+            
+            var showCard = true;
+            
+            if (difficulty && cardDifficulty !== difficulty) showCard = false;
+            if (category && cardCategory !== category) showCard = false;
+            if (search && !cardText.includes(search)) showCard = false;
+            
+            if (showCard) {
+                card.parent().show();
+            } else {
+                card.parent().hide();
+            }
+        });
+    }
+    
+    $('#difficultyFilter, #categoryFilter').change(filterChallenges);
+    $('#searchBox').on('input', filterChallenges);
+});
+</script>
+{% endblock %}
+{% endblock %}
