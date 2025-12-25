@@ -1,0 +1,650 @@
+{% extends 'base.html' %}
+
+{% block title %}Documentation - Compete CTF{% endblock %}
+
+{% block extra_css %}
+<style>
+    .documentation-container {
+        background: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        margin: 30px auto;
+        max-width: 1200px;
+    }
+    
+    .doc-section {
+        margin-bottom: 50px;
+    }
+    
+    .doc-section h2 {
+        color: #2a5298;
+        border-bottom: 3px solid #2a5298;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .doc-section h3 {
+        color: #1e3c72;
+        margin-top: 30px;
+        margin-bottom: 15px;
+    }
+    
+    .doc-section h4 {
+        color: #667eea;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    
+    .doc-toc {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        border-left: 4px solid #2a5298;
+    }
+    
+    .doc-toc h3 {
+        margin-top: 0;
+        color: #2a5298;
+    }
+    
+    .doc-toc ul {
+        list-style: none;
+        padding-left: 0;
+    }
+    
+    .doc-toc ul li {
+        margin: 8px 0;
+    }
+    
+    .doc-toc a {
+        color: #1e3c72;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    
+    .doc-toc a:hover {
+        color: #667eea;
+    }
+    
+    .feature-box {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 15px 0;
+    }
+    
+    .feature-box h4 {
+        color: white;
+        margin-top: 0;
+    }
+    
+    .code-example {
+        background: #2d2d2d;
+        color: #f8f8f2;
+        padding: 15px;
+        border-radius: 5px;
+        font-family: 'Courier New', monospace;
+        overflow-x: auto;
+        margin: 15px 0;
+    }
+    
+    .info-box {
+        background: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 4px;
+    }
+    
+    .warning-box {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 4px;
+    }
+    
+    .success-box {
+        background: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 4px;
+    }
+    
+    .step-number {
+        display: inline-block;
+        background: #2a5298;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 30px;
+        margin-right: 10px;
+        font-weight: bold;
+    }
+    
+    .difficulty-badge {
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 15px;
+        color: white;
+        font-weight: bold;
+        margin: 5px;
+    }
+    
+    .difficulty-easy {
+        background: #28a745;
+    }
+    
+    .difficulty-medium {
+        background: #ffc107;
+        color: #333;
+    }
+    
+    .difficulty-hard {
+        background: #dc3545;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+    
+    table th {
+        background: #2a5298;
+        color: white;
+        padding: 12px;
+        text-align: left;
+    }
+    
+    table td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    table tr:hover {
+        background: #f5f5f5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="ui container">
+    <div class="documentation-container">
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h1 class="ui header" style="color: #2a5298; font-size: 3em;">
+                <i class="book icon"></i>
+                Compete CTF Documentation
+            </h1>
+            <p style="font-size: 1.2em; color: #666;">
+                Complete guide to using the Compete CTF platform
+            </p>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="doc-toc">
+            <h3><i class="list icon"></i> Table of Contents</h3>
+            <ul>
+                <li><a href="#introduction">1. Introduction</a></li>
+                <li><a href="#getting-started">2. Getting Started</a></li>
+                <li><a href="#challenges">3. Challenge Categories</a></li>
+                <li><a href="#submitting-flags">4. Submitting Flags</a></li>
+                <li><a href="#profile">5. Managing Your Profile</a></li>
+                <li><a href="#creating-challenges">6. Creating Challenges (Staff Only)</a></li>
+                <li><a href="#tips">7. Tips & Best Practices</a></li>
+                <li><a href="#faq">8. Frequently Asked Questions</a></li>
+            </ul>
+        </div>
+
+        <!-- Introduction -->
+        <div class="doc-section" id="introduction">
+            <h2><i class="flag icon"></i> 1. Introduction</h2>
+            
+            <h3>What is Compete CTF?</h3>
+            <p>
+                Compete CTF is a comprehensive Capture The Flag (CTF) training platform designed to help cybersecurity enthusiasts, 
+                students, and professionals develop their skills through hands-on challenges. The platform offers three main categories 
+                of challenges: Cyber Security, Command-Line Interface (CLI), and Programming.
+            </p>
+            
+            <h3>What are CTF Challenges?</h3>
+            <p>
+                CTF (Capture The Flag) challenges are security competitions where participants solve various tasks to find hidden "flags" 
+                (strings of text). Each challenge tests different skills and provides an opportunity to learn new techniques in a safe, 
+                controlled environment.
+            </p>
+            
+            <div class="info-box">
+                <strong><i class="info circle icon"></i> Key Features:</strong>
+                <ul>
+                    <li>Three distinct challenge categories</li>
+                    <li>Multiple difficulty levels (Easy, Medium, Hard)</li>
+                    <li>User profile and progress tracking</li>
+                    <li>Community-driven challenge creation</li>
+                    <li>Real-world skill development</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Getting Started -->
+        <div class="doc-section" id="getting-started">
+            <h2><i class="rocket icon"></i> 2. Getting Started</h2>
+            
+            <h3>Creating an Account</h3>
+            <p>Follow these simple steps to get started with Compete CTF:</p>
+            
+            <div style="margin: 20px 0;">
+                <p><span class="step-number">1</span> Navigate to the <strong>Sign Up</strong> page by clicking the button in the top-right corner of the homepage.</p>
+                
+                <p><span class="step-number">2</span> Fill in the registration form with the following information:</p>
+                <ul>
+                    <li>Username (your unique identifier on the platform)</li>
+                    <li>Email address (for account recovery and notifications)</li>
+                    <li>Password (choose a strong password)</li>
+                    <li>Password confirmation</li>
+                </ul>
+                
+                <p><span class="step-number">3</span> Click <strong>Sign Up</strong> to create your account.</p>
+                
+                <p><span class="step-number">4</span> You'll be automatically logged in and redirected to the homepage.</p>
+            </div>
+            
+            <h3>Logging In</h3>
+            <p>
+                If you already have an account, click the <strong>Login</strong> button in the navigation bar and enter your 
+                username and password. You can also use the "Remember Me" option to stay logged in.
+            </p>
+            
+            <h3>Password Recovery</h3>
+            <p>
+                Forgot your password? Click the "Forgot Password?" link on the login page. You'll receive an email with 
+                instructions to reset your password securely.
+            </p>
+            
+            <div class="success-box">
+                <strong><i class="check circle icon"></i> Pro Tip:</strong> Update your profile information after signing up 
+                to personalize your experience and let other competitors know more about you!
+            </div>
+        </div>
+
+        <!-- Challenge Categories -->
+        <div class="doc-section" id="challenges">
+            <h2><i class="puzzle piece icon"></i> 3. Challenge Categories</h2>
+            
+            <p>Compete CTF offers three main categories of challenges, each designed to test different skill sets:</p>
+            
+            <!-- Cyber Challenges -->
+            <div class="feature-box">
+                <h4><i class="shield alternate icon"></i> Cyber Security Challenges</h4>
+                <p>
+                    Test your cybersecurity knowledge and skills with challenges covering offensive and defensive security topics.
+                </p>
+                <p><strong>Categories:</strong></p>
+                <ul>
+                    <li><strong>Red Team:</strong> Offensive security, penetration testing, exploitation techniques</li>
+                    <li><strong>Blue Team:</strong> Defensive security, incident response, security monitoring</li>
+                    <li><strong>Miscellaneous:</strong> General cybersecurity topics, forensics, cryptography, and more</li>
+                </ul>
+            </div>
+            
+            <!-- CLI Challenges -->
+            <div class="feature-box">
+                <h4><i class="terminal icon"></i> Command-Line Interface (CLI) Challenges</h4>
+                <p>
+                    Master command-line skills across different operating systems and shell environments.
+                </p>
+                <p><strong>Categories:</strong></p>
+                <ul>
+                    <li><strong>Linux CLI:</strong> Bash commands, shell scripting, Linux system administration</li>
+                    <li><strong>Windows CLI:</strong> CMD commands, batch scripting, Windows system management</li>
+                    <li><strong>PowerShell:</strong> PowerShell scripting, automation, and administration</li>
+                    <li><strong>Miscellaneous:</strong> Cross-platform CLI tools, custom shells, and specialized environments</li>
+                </ul>
+            </div>
+            
+            <!-- Programming Challenges -->
+            <div class="feature-box">
+                <h4><i class="code icon"></i> Programming Challenges</h4>
+                <p>
+                    Sharpen your programming and problem-solving skills with algorithmic and coding challenges.
+                </p>
+                <p><strong>Categories:</strong></p>
+                <ul>
+                    <li><strong>Python:</strong> Python programming, algorithms, data structures</li>
+                    <li><strong>JavaScript:</strong> JavaScript/Node.js programming, web development</li>
+                    <li><strong>C++:</strong> C++ programming, performance optimization, system programming</li>
+                    <li><strong>Java:</strong> Java programming, object-oriented design, enterprise patterns</li>
+                    <li><strong>Miscellaneous:</strong> Other programming languages and cross-language challenges</li>
+                </ul>
+            </div>
+            
+            <h3>Difficulty Levels</h3>
+            <p>Each challenge is tagged with a difficulty level to help you choose appropriate challenges:</p>
+            
+            <div style="margin: 20px 0;">
+                <span class="difficulty-badge difficulty-easy">Easy</span>
+                <span style="margin-left: 10px;">Beginner-friendly challenges requiring basic knowledge</span>
+            </div>
+            <div style="margin: 20px 0;">
+                <span class="difficulty-badge difficulty-medium">Medium</span>
+                <span style="margin-left: 10px;">Intermediate challenges requiring solid understanding</span>
+            </div>
+            <div style="margin: 20px 0;">
+                <span class="difficulty-badge difficulty-hard">Hard</span>
+                <span style="margin-left: 10px;">Advanced challenges requiring expert knowledge and creativity</span>
+            </div>
+            
+            <div class="info-box">
+                <strong><i class="lightbulb icon"></i> Recommendation:</strong> Start with Easy challenges to familiarize yourself 
+                with the platform and challenge format, then gradually progress to more difficult challenges as you improve.
+            </div>
+        </div>
+
+        <!-- Submitting Flags -->
+        <div class="doc-section" id="submitting-flags">
+            <h2><i class="flag checkered icon"></i> 4. Submitting Flags</h2>
+            
+            <h3>Accessing Challenges</h3>
+            <p>To view challenges in any category:</p>
+            <ol>
+                <li>Click on the desired category in the navigation bar (Cyber, CLI, or Programming)</li>
+                <li>Select <strong>View Challenges</strong> from the dropdown menu</li>
+                <li>Browse the list of available challenges</li>
+                <li>Click on any challenge to view its details</li>
+            </ol>
+            
+            <h3>Understanding Challenge Details</h3>
+            <p>Each challenge page displays:</p>
+            <ul>
+                <li><strong>Title:</strong> The challenge name</li>
+                <li><strong>Difficulty:</strong> Easy, Medium, or Hard</li>
+                <li><strong>Category:</strong> Specific subcategory within the main category</li>
+                <li><strong>Description:</strong> Detailed instructions and background information</li>
+                <li><strong>Flag Submission Form:</strong> Where you enter your answer</li>
+            </ul>
+            
+            <h3>Finding and Submitting Flags</h3>
+            <ol>
+                <li><strong>Read the description carefully</strong> - All information needed to solve the challenge is provided</li>
+                <li><strong>Work through the challenge</strong> - Use the skills and tools relevant to the challenge category</li>
+                <li><strong>Identify the flag</strong> - Flags are typically strings in formats like:
+                    <div class="code-example">flag{example_flag_here}</div>
+                    <div class="code-example">CTF{another_flag_format}</div>
+                    <div class="code-example">COMPETE{challenge_solved}</div>
+                </li>
+                <li><strong>Enter the flag</strong> - Type or paste the complete flag into the submission form</li>
+                <li><strong>Submit</strong> - Click the submit button to verify your answer</li>
+            </ol>
+            
+            <div class="warning-box">
+                <strong><i class="exclamation triangle icon"></i> Important:</strong> 
+                <ul>
+                    <li>Flags are case-sensitive unless otherwise specified</li>
+                    <li>Include the entire flag format (e.g., "flag{}" brackets)</li>
+                    <li>Whitespace matters - copy flags exactly as you find them</li>
+                    <li>There are no attempt limits, so feel free to try different approaches</li>
+                </ul>
+            </div>
+            
+            <h3>After Solving</h3>
+            <p>
+                Once you successfully submit a correct flag, you'll receive immediate feedback. Your progress is automatically 
+                tracked in your profile, allowing you to see which challenges you've completed.
+            </p>
+        </div>
+
+        <!-- Profile Management -->
+        <div class="doc-section" id="profile">
+            <h2><i class="user icon"></i> 5. Managing Your Profile</h2>
+            
+            <h3>Viewing Your Profile</h3>
+            <p>
+                Click on <strong>Profile</strong> in the navigation bar to view your account information and statistics.
+            </p>
+            
+            <h3>Updating Profile Information</h3>
+            <p>You can customize your profile with the following information:</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>First Name</strong></td>
+                        <td>Your first name (visible to other users)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Last Name</strong></td>
+                        <td>Your last name (visible to other users)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Website</strong></td>
+                        <td>Your personal website, blog, or portfolio URL</td>
+                    </tr>
+                    <tr>
+                        <td><strong>About</strong></td>
+                        <td>A brief biography or description about yourself</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>To Update Your Profile:</h3>
+            <ol>
+                <li>Navigate to your Profile page</li>
+                <li>Click the <strong>Update Profile</strong> button or link</li>
+                <li>Fill in or modify your information</li>
+                <li>Click <strong>Save</strong> to update your profile</li>
+            </ol>
+            
+            <div class="success-box">
+                <strong><i class="star icon"></i> Profile Tips:</strong>
+                <ul>
+                    <li>Add a website link to showcase your work or portfolio</li>
+                    <li>Write a compelling "About" section to connect with other competitors</li>
+                    <li>Keep your information current to reflect your growing skills</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Creating Challenges -->
+        <div class="doc-section" id="creating-challenges">
+            <h2><i class="plus circle icon"></i> 6. Creating Challenges (Staff Only)</h2>
+            
+            <div class="warning-box">
+                <strong><i class="lock icon"></i> Note:</strong> Challenge creation is restricted to staff members only. 
+                If you're interested in contributing challenges, please contact an administrator.
+            </div>
+            
+            <h3>For Staff Members</h3>
+            <p>If you have staff privileges, you can create new challenges to expand the platform:</p>
+            
+            <h4>Steps to Create a Challenge:</h4>
+            <ol>
+                <li>Navigate to the appropriate category (Cyber, CLI, or Programming)</li>
+                <li>Click <strong>New Challenge</strong> from the dropdown menu</li>
+                <li>Fill in the challenge creation form:
+                    <ul>
+                        <li><strong>Title:</strong> A clear, descriptive name for the challenge</li>
+                        <li><strong>Description:</strong> Detailed instructions and context (supports formatted text)</li>
+                        <li><strong>Difficulty:</strong> Select Easy, Medium, or Hard</li>
+                        <li><strong>Category:</strong> Choose the appropriate subcategory</li>
+                        <li><strong>Flag:</strong> The correct answer/flag for the challenge</li>
+                    </ul>
+                </li>
+                <li>Review your challenge for clarity and accuracy</li>
+                <li>Click <strong>Create Challenge</strong> to publish</li>
+            </ol>
+            
+            <h4>Challenge Creation Best Practices:</h4>
+            <ul>
+                <li><strong>Clear Instructions:</strong> Provide all necessary information without being overly explicit</li>
+                <li><strong>Appropriate Difficulty:</strong> Ensure the difficulty level matches the challenge complexity</li>
+                <li><strong>Test Your Challenge:</strong> Verify that the challenge is solvable and the flag is correct</li>
+                <li><strong>Educational Value:</strong> Ensure competitors will learn something valuable</li>
+                <li><strong>Unique Content:</strong> Create original challenges that aren't easily found elsewhere</li>
+            </ul>
+        </div>
+
+        <!-- Tips & Best Practices -->
+        <div class="doc-section" id="tips">
+            <h2><i class="lightbulb icon"></i> 7. Tips & Best Practices</h2>
+            
+            <h3>General Tips</h3>
+            <div class="ui bulleted list">
+                <div class="item">
+                    <strong>Start Simple:</strong> Begin with Easy challenges to understand the format and build confidence
+                </div>
+                <div class="item">
+                    <strong>Read Carefully:</strong> Challenge descriptions often contain subtle hints or important details
+                </div>
+                <div class="item">
+                    <strong>Take Notes:</strong> Document your approach, findings, and solutions for future reference
+                </div>
+                <div class="item">
+                    <strong>Learn from Failures:</strong> Incorrect submissions are opportunities to learn and refine your approach
+                </div>
+                <div class="item">
+                    <strong>Use Resources:</strong> Leverage online documentation, tutorials, and tools relevant to each challenge
+                </div>
+            </div>
+            
+            <h3>Category-Specific Tips</h3>
+            
+            <h4><i class="shield alternate icon"></i> Cyber Security Challenges</h4>
+            <ul>
+                <li>Familiarize yourself with common security tools (Burp Suite, Wireshark, Metasploit, etc.)</li>
+                <li>Understand basic networking concepts and protocols</li>
+                <li>Learn about web vulnerabilities (OWASP Top 10)</li>
+                <li>Practice in a safe, isolated environment</li>
+            </ul>
+            
+            <h4><i class="terminal icon"></i> CLI Challenges</h4>
+            <ul>
+                <li>Learn basic commands for your target operating system</li>
+                <li>Understand file system navigation and permissions</li>
+                <li>Practice text processing with tools like grep, sed, and awk</li>
+                <li>Use man pages and help commands (man, --help, Get-Help)</li>
+            </ul>
+            
+            <h4><i class="code icon"></i> Programming Challenges</h4>
+            <ul>
+                <li>Understand fundamental algorithms and data structures</li>
+                <li>Practice reading and analyzing code</li>
+                <li>Test your solutions with different inputs</li>
+                <li>Consider edge cases and boundary conditions</li>
+            </ul>
+            
+            <h3>Effective Learning Strategies</h3>
+            <div class="info-box">
+                <strong>Progressive Learning Path:</strong>
+                <ol>
+                    <li>Master the basics in one category before moving to advanced challenges</li>
+                    <li>Diversify across categories to develop well-rounded skills</li>
+                    <li>Revisit challenging problems after learning new techniques</li>
+                    <li>Set personal goals and track your progress</li>
+                    <li>Challenge yourself regularly with harder difficulty levels</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="doc-section" id="faq">
+            <h2><i class="question circle icon"></i> 8. Frequently Asked Questions</h2>
+            
+            <h3>Account & Access</h3>
+            
+            <h4>Q: Is Compete CTF free to use?</h4>
+            <p>A: Yes, creating an account and participating in challenges is completely free.</p>
+            
+            <h4>Q: Can I delete my account?</h4>
+            <p>A: Please contact an administrator if you wish to delete your account.</p>
+            
+            <h4>Q: I forgot my password. What should I do?</h4>
+            <p>A: Use the "Forgot Password?" link on the login page to reset your password via email.</p>
+            
+            <h3>Challenges</h3>
+            
+            <h4>Q: Are there limits on how many times I can attempt a challenge?</h4>
+            <p>A: No, you can attempt challenges as many times as needed. There are no penalties for incorrect submissions.</p>
+            
+            <h4>Q: What if I can't solve a challenge?</h4>
+            <p>A: Take a break and try a different challenge. Sometimes fresh perspective helps. You can also research the 
+            relevant topics and return to the challenge later.</p>
+            
+            <h4>Q: Can I see solutions after solving a challenge?</h4>
+            <p>A: The platform currently doesn't provide official solutions, but you can document your own approach for future reference.</p>
+            
+            <h4>Q: How often are new challenges added?</h4>
+            <p>A: New challenges are added regularly by staff members. Check back frequently for new content!</p>
+            
+            <h3>Technical Issues</h3>
+            
+            <h4>Q: The website isn't working properly. What should I do?</h4>
+            <p>A: Try the following steps:</p>
+            <ul>
+                <li>Refresh the page (Ctrl+F5 or Cmd+Shift+R)</li>
+                <li>Clear your browser cache and cookies</li>
+                <li>Try a different browser</li>
+                <li>Check your internet connection</li>
+                <li>If issues persist, contact support</li>
+            </ul>
+            
+            <h4>Q: I submitted the correct flag but it's showing as incorrect. Why?</h4>
+            <p>A: Double-check the following:</p>
+            <ul>
+                <li>Flag format is correct (including brackets, underscores, etc.)</li>
+                <li>No extra spaces before or after the flag</li>
+                <li>Correct capitalization (flags are case-sensitive)</li>
+                <li>You're submitting the complete flag</li>
+            </ul>
+            
+            <h3>Contributing</h3>
+            
+            <h4>Q: Can I create and submit my own challenges?</h4>
+            <p>A: Challenge creation is currently limited to staff members. If you're interested in contributing, 
+            please reach out to the administrators.</p>
+            
+            <h4>Q: I found a bug or have a feature suggestion. How can I report it?</h4>
+            <p>A: Please contact the platform administrators with details about the bug or your feature request.</p>
+            
+            <h3>Privacy & Security</h3>
+            
+            <h4>Q: Is my personal information secure?</h4>
+            <p>A: Yes, we take security seriously. Your password is encrypted, and we follow best practices for data protection.</p>
+            
+            <h4>Q: What information is visible to other users?</h4>
+            <p>A: Your username and any information you add to your profile (name, website, about section) may be visible to 
+            other users. Your email address and password are always private.</p>
+        </div>
+
+        <!-- Footer Section -->
+        <div style="margin-top: 60px; padding-top: 30px; border-top: 2px solid #e0e0e0; text-align: center;">
+            <h3 style="color: #2a5298;">Need More Help?</h3>
+            <p style="font-size: 1.1em;">
+                If you have questions that aren't answered in this documentation, please reach out to the 
+                platform administrators or staff members for assistance.
+            </p>
+            <div style="margin-top: 30px;">
+                <a href="{% url 'home' %}" class="ui large primary button">
+                    <i class="home icon"></i>
+                    Return to Homepage
+                </a>
+            </div>
+            <p style="margin-top: 20px; color: #999;">
+                <i class="calendar icon"></i> Last Updated: December 2025
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

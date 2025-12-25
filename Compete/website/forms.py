@@ -7,10 +7,10 @@ from .models import Account
 class CompetitorSignup(UserCreationForm):
     username = forms.CharField(max_length=40, required=True)
     email = forms.EmailField(required=True)
-    password = forms.CharField(widget=PasswordInput, required=True)
+    
     class Meta:
         model = User
-        fields = ('username', 'email', 'password')
+        fields = ('username', 'email', 'password1', 'password2')
 class UpdateProfile(forms.ModelForm):
     firstname = forms.CharField(
         max_length=40, 

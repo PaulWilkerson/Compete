@@ -65,7 +65,7 @@
         <div class="column">
             <div class="ui segment ctf-card center aligned">
                 <div class="ui statistic">
-                    <div class="value">{{ challenges.count }}</div>
+                    <div class="value">{{ total_challenges }}</div>
                     <div class="label">Total Challenges</div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
         <div class="column">
             <div class="ui segment ctf-card center aligned">
                 <div class="ui statistic">
-                    <div class="value">0</div>
+                    <div class="value">{{ solved_count }}</div>
                     <div class="label">Solved</div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
         <div class="column">
             <div class="ui segment ctf-card center aligned">
                 <div class="ui statistic">
-                    <div class="value">{{ challenges.count }}</div>
+                    <div class="value">{{ remaining_count }}</div>
                     <div class="label">Remaining</div>
                 </div>
             </div>

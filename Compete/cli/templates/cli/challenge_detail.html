@@ -48,7 +48,7 @@
             <div class="four wide column right aligned">
                 <div class="ui statistic">
                     <div class="value">
-                        <i class="users icon"></i> 0
+                        <i class="users icon"></i> {{ total_solves }}
                     </div>
                     <div class="label">Solves</div>
                 </div>
@@ -78,9 +78,7 @@
                 </h3>
                 <div class="ui divider" style="border-color: #444;"></div>
                 <div id="terminal" style="background: #000; color: #00ff00; padding: 15px; font-family: 'Courier New', monospace; min-height: 300px; border-radius: 5px; overflow-y: auto;">
-                    <div id="terminalOutput">
-                        <span style="color: #00ff00;">user@compete:~$</span> <span id="commandInput" contenteditable="true" style="outline: none;"></span>
-                    </div>
+                    <div id="terminalOutput"><span style="color: #00ff00;">user@compete:~$</span> <span id="commandInput" contenteditable="true" style="outline: none;"></span></div>
                 </div>
                 <div class="ui message" style="margin-top: 15px;">
                     <i class="info circle icon"></i>
@@ -111,7 +109,8 @@
                 </form>
                 <div class="ui message" style="margin-top: 15px;">
                     <i class="info circle icon"></i>
-                    Flags are case-sensitive and should be submitted exactly as found.
+                    <strong>Flag Format:</strong> flag{your_answer_here}
+                    <br>Flags are case-sensitive and should be submitted exactly as found.
                 </div>
             </div>
 
@@ -152,7 +151,7 @@
                         <i class="users icon"></i>
                         <div class="content">
                             <div class="header">Total Solves</div>
-                            0
+                            {{ total_solves }}
                         </div>
                     </div>
                     <div class="item">
@@ -219,62 +218,219 @@
 <script>
 $(document).ready(function() {
     var commandHistory = [];
+    var currentDirectory = '/home/user';
     
-    $('#commandInput').on('keypress', function(e) {
+    function getPrompt() {
+        var dir = currentDirectory === '/home/user' ? '~' : currentDirectory;
+        return '<span style="color: #00ff00;">user@compete:' + dir + '$</span>';
+    }
+    
+    // Function to focus the terminal input
+    function focusTerminal() {
+        var input = $('#commandInput');
+        if (input.length > 0) {
+            input.focus();
+            // Move cursor to end of content
+            var range = document.createRange();
+            var sel = window.getSelection();
+            var inputElement = input[0];
+            if (inputElement.childNodes.length > 0) {
+                range.setStart(inputElement.childNodes[0], inputElement.textContent.length);
+            } else {
+                range.setStart(inputElement, 0);
+            }
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+    }
+    
+    // Click anywhere in the terminal to focus the input
+    $('#terminal').on('click', function(e) {
+        focusTerminal();
+    });
+    
+    // Handle keyboard input on the terminal
+    $(document).on('keypress', '#commandInput', function(e) {
         if (e.which === 13) { // Enter key
             e.preventDefault();
             var command = $(this).text().trim();
             
             if (command) {
                 commandHistory.push(command);
+                
+                // Get the current line (prompt + input)
+                var currentLine = $(this).parent().clone();
+                // Replace the contenteditable input with plain text
+                currentLine.find('#commandInput').replaceWith(command);
+                
+                // Clear terminalOutput and add the completed command line
+                $('#terminalOutput').html('').append(currentLine.html());
+                
+                // Execute command and append output
                 var output = executeCommand(command);
-                $('#terminalOutput').append('<br><span style="color: #00ff00;">user@compete:~$</span> ' + command);
                 if (output) {
                     $('#terminalOutput').append('<br>' + output);
                 }
-                $('#terminalOutput').append('<br><span style="color: #00ff00;">user@compete:~$</span> <span id="commandInput" contenteditable="true" style="outline: none;"></span>');
-                $(this).remove();
-                $('#commandInput').focus();
+                
+                // Add new prompt with input on a new line
+                $('#terminalOutput').append('<br>' + getPrompt() + ' <span id="commandInput" contenteditable="true" style="outline: none;"></span>');
+                
+                focusTerminal();
                 $('#terminal').scrollTop($('#terminal')[0].scrollHeight);
             }
         }
     });
     
+    // Prevent losing focus when clicking inside the terminal
+    $('#terminal').on('mousedown', function(e) {
+        e.preventDefault();
+        focusTerminal();
+    });
+    
     function executeCommand(cmd) {
-        var parts = cmd.split(' ');
-        var command = parts[0];
+        var parts = cmd.trim().split(/\s+/);
+        var command = parts[0].toLowerCase();
         
         switch(command) {
             case 'ls':
-                return 'file1.txt  file2.txt  secret/';
+                if (currentDirectory === '/home/user') {
+                    if (parts.length > 1 && (parts[1] === 'secret' || parts[1] === 'secret/')) {
+                        return 'flag.txt  note.txt';
+                    }
+                    return 'file1.txt  file2.txt  secret/';
+                } else if (currentDirectory === '/home/user/secret') {
+                    return 'flag.txt  note.txt';
+                }
+                return '';
             case 'pwd':
-                return '/home/user';
+                return currentDirectory;
             case 'whoami':
                 return 'user';
             case 'echo':
                 return parts.slice(1).join(' ');
+            case 'cat':
+                if (parts.length > 1) {
+                    var filename = parts[1];
+                    // Handle relative and absolute paths
+                    if (currentDirectory === '/home/user/secret') {
+                        if (filename === 'flag.txt') {
+                            filename = 'secret/flag.txt';
+                        } else if (filename === 'note.txt') {
+                            filename = 'secret/note.txt';
+                        }
+                    }
+                    
+                    switch(filename) {
+                        case 'file1.txt':
+                            return 'This is the content of file1.txt\nNothing interesting here...';
+                        case 'file2.txt':
+                            return 'Welcome to the CTF challenge!\nKeep exploring to find the flag.';
+                        case 'secret/flag.txt':
+                        case 'flag.txt':
+                            if (currentDirectory === '/home/user/secret' || filename.includes('secret/')) {
+                                return '{{ challenge.flag }}';
+                            }
+                            return 'cat: ' + filename + ': No such file or directory';
+                        case 'secret/note.txt':
+                        case 'note.txt':
+                            if (currentDirectory === '/home/user/secret' || filename.includes('secret/')) {
+                                return 'Hint: Check all files in this directory';
+                            }
+                            return 'cat: ' + filename + ': No such file or directory';
+                        default:
+                            return 'cat: ' + filename + ': No such file or directory';
+                    }
+                }
+                return 'cat: missing file operand';
+            case 'cd':
+                if (parts.length === 1 || parts[1] === '~') {
+                    currentDirectory = '/home/user';
+                    return '';
+                } else {
+                    var target = parts[1];
+                    if (target === 'secret' || target === 'secret/') {
+                        if (currentDirectory === '/home/user') {
+                            currentDirectory = '/home/user/secret';
+                            return '';
+                        }
+                    } else if (target === '..' || target === '../') {
+                        if (currentDirectory === '/home/user/secret') {
+                            currentDirectory = '/home/user';
+                            return '';
+                        } else if (currentDirectory === '/home/user') {
+                            currentDirectory = '/home';
+                            return '';
+                        }
+                    } else if (target === '/') {
+                        currentDirectory = '/';
+                        return '';
+                    } else if (target === '/home/user' || target === '/home/user/') {
+                        currentDirectory = '/home/user';
+                        return '';
+                    } else if (target === '/home/user/secret' || target === '/home/user/secret/') {
+                        currentDirectory = '/home/user/secret';
+                        return '';
+                    } else {
+                        return 'cd: ' + target + ': No such file or directory';
+                    }
+                }
+                return '';
+            case 'grep':
+                if (parts.length < 2) {
+                    return 'grep: missing pattern';
+                }
+                return 'grep: No matches found';
             case 'help':
-                return 'Available commands: ls, pwd, whoami, echo, help, clear';
+                return 'Available commands: ls, pwd, whoami, echo, cat, cd, grep, help, clear';
             case 'clear':
-                $('#terminalOutput').html('<span style="color: #00ff00;">user@compete:~$</span> <span id="commandInput" contenteditable="true" style="outline: none;"></span>');
-                $('#commandInput').focus();
+                currentDirectory = '/home/user'; // Reset to home on clear
+                $('#terminalOutput').html(getPrompt() + ' <span id="commandInput" contenteditable="true" style="outline: none;"></span>');
+                focusTerminal();
+                return '';
+            case '':
                 return '';
             default:
                 return command + ': command not found';
         }
     }
     
-    $('#commandInput').focus();
+    // Initial focus
+    focusTerminal();
     
     $('#flagForm').submit(function(e) {
         e.preventDefault();
         var flag = $('input[name="flag"]').val();
+        var csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
         
-        if (flag === '{{ challenge.flag }}') {
-            alert('Congratulations! You solved the challenge!');
-        } else {
-            alert('Incorrect flag. Try again!');
-        }
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: {
+                'flag': flag,
+                'csrfmiddlewaretoken': csrftoken
+            },
+            success: function(response) {
+                if (response.success) {
+                    $('.ui.success.message').remove();
+                    $('.ui.error.message').remove();
+                    $('#flagForm').before('<div class="ui success message"><i class="check icon"></i>' + response.message + '</div>');
+                    if (response.message.includes('earned')) {
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    }
+                } else {
+                    $('.ui.error.message').remove();
+                    $('.ui.success.message').remove();
+                    $('#flagForm').before('<div class="ui error message"><i class="times icon"></i>' + response.message + '</div>');
+                }
+            },
+            error: function() {
+                $('.ui.error.message').remove();
+                $('#flagForm').before('<div class="ui error message"><i class="times icon"></i>An error occurred. Please try again.</div>');
+            }
+        });
     });
 });
 </script>

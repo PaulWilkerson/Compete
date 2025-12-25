@@ -124,3 +124,7 @@ STATIC_URL = "static/"
 
 # CSRF Trusted Origins
 CSRF_TRUSTED_ORIGINS = ['https://localhost:8000', 'https://127.0.0.1:8000', 'https://*.github.dev']
+
+# Authentication URLs
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'

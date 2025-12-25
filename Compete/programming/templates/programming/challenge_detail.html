@@ -48,7 +48,7 @@
             <div class="four wide column right aligned">
                 <div class="ui statistic">
                     <div class="value">
-                        <i class="users icon"></i> 0
+                        <i class="users icon"></i> {{ total_solves }}
                     </div>
                     <div class="label">Solves</div>
                 </div>
@@ -119,7 +119,8 @@
                 </form>
                 <div class="ui message" style="margin-top: 15px;">
                     <i class="info circle icon"></i>
-                    Flags are case-sensitive and should be submitted exactly as found.
+                    <strong>Flag Format:</strong> flag{your_answer_here}
+                    <br>Flags are case-sensitive and should be submitted exactly as found.
                 </div>
             </div>
 
@@ -160,7 +161,7 @@
                         <i class="users icon"></i>
                         <div class="content">
                             <div class="header">Total Solves</div>
-                            0
+                            {{ total_solves }}
                         </div>
                     </div>
                     <div class="item">
@@ -246,12 +247,36 @@ $(document).ready(function() {
     $('#flagForm').submit(function(e) {
         e.preventDefault();
         var flag = $('input[name="flag"]').val();
+        var csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
         
-        if (flag === '{{ challenge.flag }}') {
-            alert('Congratulations! You solved the challenge!');
-        } else {
-            alert('Incorrect flag. Try again!');
-        }
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: {
+                'flag': flag,
+                'csrfmiddlewaretoken': csrftoken
+            },
+            success: function(response) {
+                if (response.success) {
+                    $('.ui.success.message').remove();
+                    $('.ui.error.message').remove();
+                    $('#flagForm').before('<div class="ui success message"><i class="check icon"></i>' + response.message + '</div>');
+                    if (response.message.includes('earned')) {
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    }
+                } else {
+                    $('.ui.error.message').remove();
+                    $('.ui.success.message').remove();
+                    $('#flagForm').before('<div class="ui error message"><i class="times icon"></i>' + response.message + '</div>');
+                }
+            },
+            error: function() {
+                $('.ui.error.message').remove();
+                $('#flagForm').before('<div class="ui error message"><i class="times icon"></i>An error occurred. Please try again.</div>');
+            }
+        });
     });
 });
 </script>
