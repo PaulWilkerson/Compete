@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up - Compete CTF{% endblock %}
+
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui middle aligned center aligned grid" style="min-height: 500px;">
+        <div class="column" style="max-width: 500px;">
+            <div class="ui segment ctf-card">
+                <h2 class="ui primary header" style="margin-bottom: 30px;">
+                    <i class="signup icon"></i>
+                    <div class="content">
+                        Join Compete CTF
+                        <div class="sub header">Start your cybersecurity journey today</div>
+                    </div>
+                </h2>
+
+                {% if form.errors %}
+                    <div class="ui error message">
+                        <div class="header">Registration Failed</div>
+                        <ul class="list">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <form method="post" action="{% url 'signup' %}" class="ui large form">
+                    {% csrf_token %}
+                    <div class="ui stacked segment">
+                        <div class="field">
+                            <label>Username</label>
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                {{ form.username }}
+                            </div>
+                            {% if form.username.errors %}
+                                <div class="ui pointing red basic label">
+                                    {{ form.username.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="field">
+                            <label>Email Address</label>
+                            <div class="ui left icon input">
+                                <i class="mail icon"></i>
+                                {{ form.email }}
+                            </div>
+                            {% if form.email.errors %}
+                                <div class="ui pointing red basic label">
+                                    {{ form.email.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="field">
+                            <label>Password</label>
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                {{ form.password1 }}
+                            </div>
+                            {% if form.password1.errors %}
+                                <div class="ui pointing red basic label">
+                                    {{ form.password1.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="field">
+                            <label>Confirm Password</label>
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                {{ form.password2 }}
+                            </div>
+                            {% if form.password2.errors %}
+                                <div class="ui pointing red basic label">
+                                    {{ form.password2.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <button type="submit" class="ui fluid large primary submit button">
+                            <i class="rocket icon"></i>
+                            Create Account
+                        </button>
+                    </div>
+                </form>
+
+                <div class="ui message">
+                    Already have an account? 
+                    <a href="{% url 'login' %}">
+                        <i class="sign in icon"></i>
+                        Login here
+                    </a>
+                </div>
+            </div>
+
+            <div class="ui message" style="background: rgba(255, 255, 255, 0.9);">
+                <i class="info circle icon"></i>
+                <strong>Benefits of joining:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Access to 500+ challenges</li>
+                    <li>Compete on global leaderboards</li>
+                    <li>Earn achievements and badges</li>
+                    <li>Track your progress and skills</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Add placeholder text to form fields
+    $('input[name="username"]').attr('placeholder', 'Choose a unique username');
+    $('input[name="email"]').attr('placeholder', 'your.email@example.com');
+    $('input[name="password1"]').attr('placeholder', 'Create a strong password');
+    $('input[name="password2"]').attr('placeholder', 'Confirm your password');
+});
+</script>
+{% endblock %}
+{% endblock %}

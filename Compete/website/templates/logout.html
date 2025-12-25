@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Logged Out - Compete CTF{% endblock %}
+
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui middle aligned center aligned grid" style="min-height: 500px;">
+        <div class="column" style="max-width: 500px;">
+            <div class="ui segment ctf-card">
+                <div class="ui info message">
+                    <i class="huge sign out icon"></i>
+                    <h2 class="ui header" style="margin-top: 20px;">
+                        Successfully Logged Out
+                    </h2>
+                </div>
+
+                <div style="margin: 30px 0;">
+                    <p style="font-size: 1.1em; line-height: 1.6;">
+                        You have been successfully logged out of your Compete CTF account. 
+                        We hope to see you back soon!
+                    </p>
+                </div>
+
+                <div class="ui message">
+                    <div class="header">Thanks for participating!</div>
+                    <p>Keep practicing and improving your cybersecurity skills.</p>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <a href="{% url 'login' %}" class="ui large teal button">
+                        <i class="sign in icon"></i>
+                        Login Again
+                    </a>
+                    <a href="{% url 'home' %}" class="ui large button">
+                        <i class="home icon"></i>
+                        Go Home
+                    </a>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <p style="opacity: 0.7;">
+                        <i class="info circle icon"></i>
+                        Your session data has been cleared for security.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

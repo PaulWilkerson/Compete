@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Compete CTF{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+        }
+        .main-nav {
+            background: rgba(0, 0, 0, 0.7) !important;
+            border-radius: 0 !important;
+            border: none !important;
+            margin: 0 !important;
+        }
+        .main-container {
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        .ctf-card {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .hero-section {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 80px 0;
+            color: white;
+            text-align: center;
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        footer {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+        .challenge-card {
+            transition: transform 0.3s;
+        }
+        .challenge-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="ui inverted menu main-nav">
+        <div class="ui container">
+            <a href="{% url 'home' %}" class="header item">
+                <i class="flag icon"></i>
+                Compete CTF
+            </a>
+            <a href="{% url 'home' %}" class="item">Home</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="item">
+                    <i class="user icon"></i> Profile
+                </a>
+                <div class="right menu">
+                    <div class="item">
+                        <span style="color: #21ba45;">
+                            <i class="circle icon"></i> {{ user.username }}
+                        </span>
+                    </div>
+                    <a href="{% url 'logout' %}" class="item">
+                        <i class="sign out icon"></i> Logout
+                    </a>
+                </div>
+            {% else %}
+                <div class="right menu">
+                    <a href="{% url 'login' %}" class="item">
+                        <i class="sign in icon"></i> Login
+                    </a>
+                    <a href="{% url 'signup' %}" class="ui primary button" style="margin-left: 10px; margin-top: 5px;">
+                        <i class="signup icon"></i> Sign Up
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Content -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer>
+        <div class="ui container">
+            <div class="ui stackable grid">
+                <div class="eight wide column">
+                    <h4 class="ui inverted header">
+                        <i class="flag icon"></i>
+                        Compete CTF Platform
+                    </h4>
+                    <p>Challenge yourself. Learn cybersecurity. Compete with the best.</p>
+                </div>
+                <div class="four wide column">
+                    <h4 class="ui inverted header">Resources</h4>
+                    <div class="ui inverted link list">
+                        <a class="item" href="#">Documentation</a>
+                        <a class="item" href="#">Challenges</a>
+                        <a class="item" href="#">Leaderboard</a>
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <h4 class="ui inverted header">Connect</h4>
+                    <div class="ui inverted link list">
+                        <a class="item" href="#"><i class="github icon"></i>GitHub</a>
+                        <a class="item" href="#"><i class="discord icon"></i>Discord</a>
+                        <a class="item" href="#"><i class="twitter icon"></i>Twitter</a>
+                    </div>
+                </div>
+            </div>
+            <div class="ui inverted divider"></div>
+            <p style="text-align: center; opacity: 0.7;">© 2025 Compete CTF. All rights reserved.</p>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

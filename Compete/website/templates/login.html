@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Compete CTF{% endblock %}
+
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui middle aligned center aligned grid" style="min-height: 500px;">
+        <div class="column" style="max-width: 450px;">
+            <div class="ui segment ctf-card">
+                <h2 class="ui teal header" style="margin-bottom: 30px;">
+                    <i class="lock icon"></i>
+                    <div class="content">
+                        Login to Your Account
+                    </div>
+                </h2>
+
+                {% if user.is_authenticated %}
+                    <div class="ui success message">
+                        <div class="header">Welcome back, {{ user.username }}!</div>
+                        <p>You are already logged in.</p>
+                    </div>
+                    <a href="{% url 'profile' %}" class="ui fluid primary button">
+                        <i class="user icon"></i>
+                        Go to Profile
+                    </a>
+                    <a href="{% url 'logout' %}" class="ui fluid button" style="margin-top: 10px;">
+                        <i class="sign out icon"></i>
+                        Logout
+                    </a>
+                {% else %}
+                    {% if form.errors %}
+                        <div class="ui error message">
+                            <div class="header">Login Failed</div>
+                            <p>Invalid username or password. Please try again.</p>
+                        </div>
+                    {% endif %}
+
+                    <form method="post" action="{% url 'login' %}" class="ui large form">
+                        {% csrf_token %}
+                        <div class="ui stacked segment">
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="user icon"></i>
+                                    <input type="text" id="username" name="username" placeholder="Username" required autofocus>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="lock icon"></i>
+                                    <input type="password" id="password" name="password" placeholder="Password" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="ui fluid large teal submit button">
+                                <i class="sign in icon"></i>
+                                Login
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="ui message">
+                        <a href="{% url 'password_reset' %}">
+                            <i class="help circle icon"></i>
+                            Forgot your password?
+                        </a>
+                    </div>
+
+                    <div class="ui message">
+                        <div class="header">New to Compete CTF?</div>
+                        <a href="{% url 'signup' %}">
+                            <i class="signup icon"></i>
+                            Create an account
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

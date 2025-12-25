@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - Compete CTF{% endblock %}
+
+{% block content %}
+
+<div class="ui container main-container">
+    <!-- Profile Header -->
+    <div class="ui segment ctf-card">
+        <div class="ui stackable grid">
+            <div class="four wide column center aligned">
+                <div class="ui circular image" style="width: 150px; height: 150px; margin: 0 auto; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+                    <h1 style="color: white; font-size: 3em; margin: 0;">{{ user.username|slice:":1"|upper }}</h1>
+                </div>
+            </div>
+            <div class="twelve wide column">
+                <h1 class="ui header">
+                    {{ user.username }}
+                    <div class="sub header">
+                        <i class="mail icon"></i> {{ user.email }}
+                    </div>
+                </h1>
+                
+                {% if objects %}
+                    {% for account in objects %}
+                        <div class="ui list">
+                            {% if account.firstname or account.lastname %}
+                                <div class="item">
+                                    <i class="user icon"></i>
+                                    <div class="content">
+                                        {{ account.firstname }} {{ account.lastname }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if account.website %}
+                                <div class="item">
+                                    <i class="linkify icon"></i>
+                                    <div class="content">
+                                        <a href="{{ account.website }}" target="_blank">{{ account.website }}</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if account.about %}
+                                <div class="item">
+                                    <i class="info circle icon"></i>
+                                    <div class="content">
+                                        {{ account.about }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                <div style="margin-top: 20px;">
+                    <a href="{% url 'update_profile' %}" class="ui primary button">
+                        <i class="edit icon"></i>
+                        Edit Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="ui three column stackable grid" style="margin-top: 30px;">
+        <div class="column">
+            <div class="ui segment ctf-card center aligned">
+                <div class="ui statistic">
+                    <div class="value">
+                        <i class="trophy icon"></i> 42
+                    </div>
+                    <div class="label">Challenges Solved</div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="ui segment ctf-card center aligned">
+                <div class="ui statistic">
+                    <div class="value">
+                        <i class="star icon"></i> 1,250
+                    </div>
+                    <div class="label">Total Points</div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="ui segment ctf-card center aligned">
+                <div class="ui statistic">
+                    <div class="value">
+                        <i class="chart line icon"></i> #127
+                    </div>
+                    <div class="label">Global Rank</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="ui segment ctf-card" style="margin-top: 30px;">
+        <h2 class="ui header">
+            <i class="history icon"></i>
+            <div class="content">
+                Recent Activity
+            </div>
+        </h2>
+        <div class="ui divider"></div>
+        <div class="ui relaxed divided list">
+            <div class="item">
+                <i class="large check circle green icon middle aligned"></i>
+                <div class="content">
+                    <div class="header">SQL Injection Challenge</div>
+                    <div class="description">Solved • Web Exploitation • 100 points</div>
+                </div>
+            </div>
+            <div class="item">
+                <i class="large check circle green icon middle aligned"></i>
+                <div class="content">
+                    <div class="header">Caesar Cipher</div>
+                    <div class="description">Solved • Cryptography • 50 points</div>
+                </div>
+            </div>
+            <div class="item">
+                <i class="large clock outline icon middle aligned"></i>
+                <div class="content">
+                    <div class="header">Buffer Overflow</div>
+                    <div class="description">In Progress • Binary Exploitation • 200 points</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills Breakdown -->
+    <div class="ui segment ctf-card" style="margin-top: 30px;">
+        <h2 class="ui header">
+            <i class="chart pie icon"></i>
+            <div class="content">
+                Skills Breakdown
+            </div>
+        </h2>
+        <div class="ui divider"></div>
+        <div class="ui grid">
+            <div class="eight wide column">
+                <div class="ui indicating progress" data-percent="75" style="margin-bottom: 20px;">
+                    <div class="bar" style="width: 75%;"></div>
+                    <div class="label">Web Exploitation</div>
+                </div>
+                <div class="ui indicating progress" data-percent="60" style="margin-bottom: 20px;">
+                    <div class="bar" style="width: 60%; background-color: #2185d0;"></div>
+                    <div class="label">Cryptography</div>
+                </div>
+                <div class="ui indicating progress" data-percent="45" style="margin-bottom: 20px;">
+                    <div class="bar" style="width: 45%; background-color: #21ba45;"></div>
+                    <div class="label">Reverse Engineering</div>
+                </div>
+            </div>
+            <div class="eight wide column">
+                <div class="ui indicating progress" data-percent="30" style="margin-bottom: 20px;">
+                    <div class="bar" style="width: 30%; background-color: #a333c8;"></div>
+                    <div class="label">Binary Exploitation</div>
+                </div>
+                <div class="ui indicating progress" data-percent="55" style="margin-bottom: 20px;">
+                    <div class="bar" style="width: 55%; background-color: #f2711c;"></div>
+                    <div class="label">Forensics</div>
+                </div>
+                <div class="ui indicating progress" data-percent="40" style="margin-bottom: 20px;">
+                    <div class="bar" style="width: 40%; background-color: #00b5ad;"></div>
+                    <div class="label">Miscellaneous</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements -->
+    <div class="ui segment ctf-card" style="margin-top: 30px;">
+        <h2 class="ui header">
+            <i class="trophy icon"></i>
+            <div class="content">
+                Achievements
+            </div>
+        </h2>
+        <div class="ui divider"></div>
+        <div class="ui four stackable cards">
+            <div class="card">
+                <div class="content center aligned">
+                    <i class="massive star yellow icon"></i>
+                    <div class="header" style="margin-top: 10px;">First Blood</div>
+                    <div class="meta">Solve your first challenge</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="content center aligned">
+                    <i class="massive fire orange icon"></i>
+                    <div class="header" style="margin-top: 10px;">On Fire</div>
+                    <div class="meta">Solve 10 challenges in a row</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="content center aligned" style="opacity: 0.5;">
+                    <i class="massive rocket grey icon"></i>
+                    <div class="header" style="margin-top: 10px;">Speed Demon</div>
+                    <div class="meta">Solve a challenge in under 5 minutes</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="content center aligned" style="opacity: 0.5;">
+                    <i class="massive trophy grey icon"></i>
+                    <div class="header" style="margin-top: 10px;">Century Club</div>
+                    <div class="meta">Solve 100 challenges</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

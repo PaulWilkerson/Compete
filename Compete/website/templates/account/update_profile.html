@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Profile - Compete CTF{% endblock %}
+
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui middle aligned center aligned grid" style="min-height: 500px;">
+        <div class="column" style="max-width: 600px;">
+            <div class="ui segment ctf-card">
+                <h2 class="ui teal header" style="margin-bottom: 30px;">
+                    <i class="edit icon"></i>
+                    <div class="content">
+                        Update Your Profile
+                        <div class="sub header">Keep your information up to date</div>
+                    </div>
+                </h2>
+
+                {% if form.errors %}
+                    <div class="ui error message">
+                        <div class="header">Update Failed</div>
+                        <ul class="list">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <form method="post" action="{% url 'update_profile' %}" class="ui large form">
+                    {% csrf_token %}
+                    <div class="ui stacked segment" style="text-align: left;">
+                        <div class="two fields">
+                            <div class="field">
+                                <label>First Name</label>
+                                <div class="ui left icon input">
+                                    <i class="user icon"></i>
+                                    {{ form.firstname }}
+                                </div>
+                                {% if form.firstname.errors %}
+                                    <div class="ui pointing red basic label">
+                                        {{ form.firstname.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="field">
+                                <label>Last Name</label>
+                                <div class="ui left icon input">
+                                    <i class="user icon"></i>
+                                    {{ form.lastname }}
+                                </div>
+                                {% if form.lastname.errors %}
+                                    <div class="ui pointing red basic label">
+                                        {{ form.lastname.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="field">
+                            <label>Website</label>
+                            <div class="ui left icon input">
+                                <i class="linkify icon"></i>
+                                {{ form.website }}
+                            </div>
+                            {% if form.website.errors %}
+                                <div class="ui pointing red basic label">
+                                    {{ form.website.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="field">
+                            <label>About Me</label>
+                            <div class="ui input">
+                                {{ form.about }}
+                            </div>
+                            {% if form.about.errors %}
+                                <div class="ui pointing red basic label">
+                                    {{ form.about.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="ui divider"></div>
+
+                        <button type="submit" class="ui fluid large teal submit button">
+                            <i class="save icon"></i>
+                            Save Changes
+                        </button>
+                        
+                        <a href="{% url 'profile' %}" class="ui fluid large button" style="margin-top: 10px;">
+                            <i class="cancel icon"></i>
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+
+                <div class="ui info message">
+                    <i class="info circle icon"></i>
+                    <strong>Privacy Note:</strong> Your profile information will be visible to other users on the platform.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Add placeholder text to form fields
+    $('input[name="firstname"]').attr('placeholder', 'Enter your first name');
+    $('input[name="lastname"]').attr('placeholder', 'Enter your last name');
+    $('input[name="website"]').attr('placeholder', 'https://yourwebsite.com');
+    $('textarea[name="about"]').attr('placeholder', 'Tell us about yourself and your interests...');
+    
+    // Style the textarea
+    $('textarea[name="about"]').css({
+        'min-height': '120px',
+        'resize': 'vertical'
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}

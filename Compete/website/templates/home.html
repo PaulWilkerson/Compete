@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Compete CTF{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="ui container">
+        <h1 class="ui huge inverted header">
+            <i class="shield alternate icon"></i>
+            Welcome to Compete CTF
+        </h1>
+        <h2 class="ui inverted header">Master Cybersecurity Through Hands-On Challenges</h2>
+        <p style="font-size: 1.2em; margin-top: 20px;">
+            Test your skills in real-world scenarios. Compete with professionals.
+        </p>
+        {% if not user.is_authenticated %}
+        <div style="margin-top: 30px;">
+            <a href="{% url 'signup' %}" class="ui huge primary button">
+                <i class="rocket icon"></i>
+                Get Started Now
+            </a>
+            <a href="{% url 'login' %}" class="ui huge inverted button">
+                <i class="sign in icon"></i>
+                Login
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="ui container main-container">
+    <!-- Stats Section -->
+    <div class="ui three column stackable grid">
+        <div class="column">
+            <div class="stats-card">
+                <h3 class="ui inverted header">
+                    <i class="trophy icon"></i>
+                    Tons of user made challenges
+                </h3>
+                <p>From beginner to expert level across multiple categories</p>
+            </div>
+        </div>
+        <div class="column">
+            <div class="stats-card">
+                <h3 class="ui inverted header">
+                    <i class="users icon"></i>
+                    Competitors from all over the globe.
+                </h3>
+                <p>Join a thriving community of cybersecurity enthusiasts</p>
+            </div>
+        </div>
+        <div class="column">
+            <div class="stats-card">
+                <h3 class="ui inverted header">
+                    <i class="code icon"></i>
+                    24/7 Access
+                </h3>
+                <p>Practice anytime, anywhere at your own pace</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Challenge Categories -->
+    <div class="ui segment ctf-card" style="margin-top: 50px;">
+        <h2 class="ui header">
+            <i class="grid layout icon"></i>
+            Challenge Categories
+        </h2>
+        <div class="ui divider"></div>
+        <div class="ui three column stackable grid">
+            <div class="column">
+                <div class="ui fluid card challenge-card">
+                    <div class="content">
+                        <div class="header">
+                            <i class="bug icon red"></i>
+                            Web Exploitation
+                        </div>
+                        <div class="description">
+                            SQL injection, XSS, CSRF, and more web vulnerabilities
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui fluid card challenge-card">
+                    <div class="content">
+                        <div class="header">
+                            <i class="lock icon blue"></i>
+                            Cryptography
+                        </div>
+                        <div class="description">
+                            Encryption algorithms, hash functions, and cipher breaking
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui fluid card challenge-card">
+                    <div class="content">
+                        <div class="header">
+                            <i class="code icon green"></i>
+                            Reverse Engineering
+                        </div>
+                        <div class="description">
+                            Binary analysis, decompilation, and malware analysis
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui fluid card challenge-card">
+                    <div class="content">
+                        <div class="header">
+                            <i class="file code icon purple"></i>
+                            Binary Exploitation
+                        </div>
+                        <div class="description">
+                            Buffer overflows, ROP chains, and memory corruption
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui fluid card challenge-card">
+                    <div class="content">
+                        <div class="header">
+                            <i class="search icon orange"></i>
+                            Forensics
+                        </div>
+                        <div class="description">
+                            Digital forensics, steganography, and data recovery
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui fluid card challenge-card">
+                    <div class="content">
+                        <div class="header">
+                            <i class="terminal icon teal"></i>
+                            Miscellaneous
+                        </div>
+                        <div class="description">
+                            OSINT, networking, and other security challenges on top of the general Linux Bash CLI, and Programming challenges.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="ui segment ctf-card" style="margin-top: 30px;">
+        <h2 class="ui header">
+            <i class="star icon"></i>
+            Why Choose Compete CTF?
+        </h2>
+        <div class="ui divider"></div>
+        <div class="ui two column stackable grid">
+            <div class="column">
+                <h3 class="ui header">
+                    <i class="chart line icon"></i>
+                    Track Your Progress
+                </h3>
+                <p>Monitor your skill development with detailed analytics and performance metrics across all categories.</p>
+            </div>
+            <div class="column">
+                <h3 class="ui header">
+                    <i class="trophy icon"></i>
+                    Compete Globally
+                </h3>
+                <p>Participate in competitions, climb the leaderboard, and earn recognition in the cybersecurity community.</p>
+            </div>
+            <div class="column">
+                <h3 class="ui header">
+                    <i class="graduation cap icon"></i>
+                    Learn From Experts
+                </h3>
+                <p>Access detailed write-ups, hints, and educational resources created by industry professionals.</p>
+            </div>
+            <div class="column">
+                <h3 class="ui header">
+                    <i class="shield alternate icon"></i>
+                    Real-World Skills
+                </h3>
+                <p>Practice techniques used in actual penetration testing and security assessments.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
