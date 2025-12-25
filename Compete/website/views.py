@@ -40,7 +40,7 @@ def profile(request):
     total_points = sum(challenge.points for challenge in solved_challenges)
     
     # Get recent activity
-    recent_activity = solved_challenges[:10]
+    recent_activity = solved_challenges.order_by('-solved_at')[:10]
     
     context = {
         'objects': objects,
@@ -49,7 +49,7 @@ def profile(request):
         'recent_activity': recent_activity,
     }
     
-    return render(request, 'account/profile.html', context)
+    return render(request, 'profile.html', context)
 @login_required
 def update_profile(request):
     try:
@@ -62,9 +62,9 @@ def update_profile(request):
         form = UpdateProfile(request.POST, instance=profile)
         if form.is_valid():
             form.save()
-            return render(request, 'account/profile.html', { 'objects': [profile] } )
+            return redirect('profile')
         else:
-            return render(request, 'account/update_profile.html', { 'form': form } )
+            return render(request, 'update_profile.html', { 'form': form } )
     else:
         form = UpdateProfile(instance=profile)
-        return render(request, 'account/update_profile.html', { 'form': form } )
+        return render(request, 'update_profile.html', { 'form': form } )
