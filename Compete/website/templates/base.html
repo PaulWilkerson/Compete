@@ -57,15 +57,17 @@
 <body>
     <!-- Navigation -->
     <div class="ui inverted menu main-nav">
-        <div class="ui container">
+        <div class="ui container" style="justify-content: center;">
             <a href="{% url 'home' %}" class="header item">
                 <i class="flag icon"></i>
                 Compete CTF
             </a>
-            <a href="{% url 'home' %}" class="item">Home</a>
+            <a href="{% url 'home' %}" class="ui inverted button" style="margin: 8px 5px;">
+                <i class="home icon"></i> Home
+            </a>
             
             <!-- Cyber Challenges Dropdown -->
-            <div class="ui dropdown item">
+            <div class="ui inverted floating dropdown button" style="margin: 8px 5px;">
                 <i class="shield alternate icon"></i> Cyber
                 <i class="dropdown icon"></i>
                 <div class="menu">
@@ -81,7 +83,7 @@
             </div>
             
             <!-- CLI Challenges Dropdown -->
-            <div class="ui dropdown item">
+            <div class="ui inverted floating dropdown button" style="margin: 8px 5px;">
                 <i class="terminal icon"></i> CLI
                 <i class="dropdown icon"></i>
                 <div class="menu">
@@ -97,7 +99,7 @@
             </div>
             
             <!-- Programming Challenges Dropdown -->
-            <div class="ui dropdown item">
+            <div class="ui inverted floating dropdown button" style="margin: 8px 5px;">
                 <i class="code icon"></i> Programming
                 <i class="dropdown icon"></i>
                 <div class="menu">
@@ -112,12 +114,12 @@
                 </div>
             </div>
             
-            <a href="{% url 'leaderboard' %}" class="item">
+            <a href="{% url 'leaderboard' %}" class="ui inverted button" style="margin: 8px 5px;">
                 <i class="trophy icon"></i> Leaderboard
             </a>
             
             {% if user.is_authenticated %}
-                <a href="{% url 'profile' %}" class="item">
+                <a href="{% url 'profile' %}" class="ui inverted button" style="margin: 8px 5px;">
                     <i class="user icon"></i> Profile
                 </a>
                 <div class="right menu">
@@ -133,16 +135,16 @@
                             <i class="user icon"></i> {{ user.username }}
                         </div>
                     </div>
-                    <a href="{% url 'logout' %}" class="item">
+                    <a href="{% url 'logout' %}" class="ui inverted button" style="margin: 8px 5px;">
                         <i class="sign out icon"></i> Logout
                     </a>
                 </div>
             {% else %}
                 <div class="right menu">
-                    <a href="{% url 'login' %}" class="item">
+                    <a href="{% url 'login' %}" class="ui inverted button" style="margin: 8px 5px;">
                         <i class="sign in icon"></i> Login
                     </a>
-                    <a href="{% url 'signup' %}" class="ui primary button" style="margin-left: 10px; margin-top: 5px;">
+                    <a href="{% url 'signup' %}" class="ui primary button" style="margin: 8px 5px;">
                         <i class="signup icon"></i> Sign Up
                     </a>
                 </div>
