@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from .forms import CompetitorSignup, UpdateProfile
 from .models import Account, SolvedChallenge
 
@@ -70,35 +70,35 @@ def update_profile(request):
         return render(request, 'update_profile.html', { 'form': form } )
 
 def leaderboard(request):
-    # Get all users with their total points
-    users_with_points = []
-    all_users = User.objects.all()
+    # Get all users with their total points using aggregation
+    users_with_points = User.objects.annotate(
+        total_points=Sum('solved_challenges__points'),
+        total_challenges=Count('solved_challenges')
+    ).filter(
+        total_points__gt=0
+    ).order_by('-total_points')[:100]
     
-    for user in all_users:
-        solved_challenges = SolvedChallenge.objects.filter(user=user)
-        total_points = sum(challenge.points for challenge in solved_challenges)
-        total_challenges = solved_challenges.count()
-        
-        if total_points > 0 or total_challenges > 0:  # Only include users who have solved at least one challenge
-            users_with_points.append({
-                'user': user,
-                'total_points': total_points,
-                'total_challenges': total_challenges,
-            })
-    
-    # Sort by points (descending) and take top 100
-    users_with_points.sort(key=lambda x: x['total_points'], reverse=True)
-    top_100_users = users_with_points[:100]
-    
-    # Add rank to each user
-    for i, user_data in enumerate(top_100_users):
-        user_data['rank'] = i + 1
+    # Convert to list and add ranks
+    top_100_users = []
+    for i, user in enumerate(users_with_points):
+        top_100_users.append({
+            'user': user,
+            'total_points': user.total_points or 0,
+            'total_challenges': user.total_challenges,
+            'rank': i + 1,
+        })
     
     # Find current user's rank if authenticated
     current_user_rank = None
     if request.user.is_authenticated:
-        for i, user_data in enumerate(users_with_points):
-            if user_data['user'] == request.user:
+        user_with_rank = User.objects.annotate(
+            total_points=Sum('solved_challenges__points')
+        ).filter(
+            total_points__gt=0
+        ).order_by('-total_points')
+        
+        for i, user in enumerate(user_with_rank):
+            if user == request.user:
                 current_user_rank = i + 1
                 break
     
