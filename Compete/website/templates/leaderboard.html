@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+
+{% block title %}Leaderboard - Compete CTF{% endblock %}
+
+{% block extra_css %}
+<style>
+    .leaderboard-container {
+        background: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        margin: 30px auto;
+        max-width: 1200px;
+    }
+    
+    .leaderboard-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .rank-badge {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 50%;
+        text-align: center;
+        font-weight: bold;
+        color: white;
+        margin-right: 10px;
+    }
+    
+    .rank-1 {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        font-size: 1.2em;
+    }
+    
+    .rank-2 {
+        background: linear-gradient(135deg, #C0C0C0 0%, #A0A0A0 100%);
+        font-size: 1.1em;
+    }
+    
+    .rank-3 {
+        background: linear-gradient(135deg, #CD7F32 0%, #B87333 100%);
+        font-size: 1.1em;
+    }
+    
+    .rank-other {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .leaderboard-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    
+    .leaderboard-table th {
+        background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+        color: white;
+        padding: 15px;
+        text-align: left;
+        font-weight: bold;
+    }
+    
+    .leaderboard-table td {
+        padding: 15px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .leaderboard-table tr:hover {
+        background: #f8f9fa;
+    }
+    
+    .current-user-row {
+        background: #e7f3ff !important;
+        border-left: 4px solid #2196F3;
+    }
+    
+    .current-user-row:hover {
+        background: #d4e9ff !important;
+    }
+    
+    .points-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 15px;
+        font-weight: bold;
+    }
+    
+    .challenges-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 15px;
+        font-weight: bold;
+    }
+    
+    .trophy-icon {
+        color: #FFD700;
+        font-size: 1.5em;
+        margin-right: 10px;
+    }
+    
+    .your-rank-box {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    
+    .your-rank-box h3 {
+        color: white;
+        margin-top: 0;
+    }
+    
+    .no-data-message {
+        text-align: center;
+        padding: 40px;
+        color: #666;
+        font-size: 1.2em;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="ui container">
+    <div class="leaderboard-container">
+        <!-- Header -->
+        <div class="leaderboard-header">
+            <h1 class="ui header" style="color: #2a5298; font-size: 3em;">
+                <i class="trophy icon"></i>
+                Leaderboard
+            </h1>
+            <p style="font-size: 1.2em; color: #666;">
+                Top 100 competitors by points earned
+            </p>
+        </div>
+        
+        <!-- Current User Rank -->
+        {% if user.is_authenticated and current_user_rank %}
+        <div class="your-rank-box">
+            <h3><i class="user icon"></i> Your Ranking</h3>
+            <div style="font-size: 2em; font-weight: bold;">
+                Rank #{{ current_user_rank }}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Leaderboard Table -->
+        {% if top_users %}
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Rank</th>
+                    <th>Username</th>
+                    <th style="width: 150px; text-align: center;">Challenges</th>
+                    <th style="width: 150px; text-align: center;">Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user_data in top_users %}
+                <tr {% if user.is_authenticated and user_data.user == user %}class="current-user-row"{% endif %}>
+                    <td>
+                        {% if user_data.rank == 1 %}
+                            <span class="rank-badge rank-1">
+                                <i class="trophy icon"></i>
+                            </span>
+                        {% elif user_data.rank == 2 %}
+                            <span class="rank-badge rank-2">
+                                {{ user_data.rank }}
+                            </span>
+                        {% elif user_data.rank == 3 %}
+                            <span class="rank-badge rank-3">
+                                {{ user_data.rank }}
+                            </span>
+                        {% else %}
+                            <span class="rank-badge rank-other">
+                                {{ user_data.rank }}
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <strong>{{ user_data.user.username }}</strong>
+                        {% if user.is_authenticated and user_data.user == user %}
+                            <i class="check circle icon" style="color: #28a745;"></i> <em>(You)</em>
+                        {% endif %}
+                    </td>
+                    <td style="text-align: center;">
+                        <span class="challenges-badge">{{ user_data.total_challenges }}</span>
+                    </td>
+                    <td style="text-align: center;">
+                        <span class="points-badge">{{ user_data.total_points }} pts</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="no-data-message">
+            <i class="question circle icon" style="font-size: 3em; color: #ccc;"></i>
+            <p>No competitors have earned points yet. Be the first!</p>
+            <a href="{% url 'home' %}" class="ui primary button" style="margin-top: 20px;">
+                <i class="flag icon"></i> Start Competing
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

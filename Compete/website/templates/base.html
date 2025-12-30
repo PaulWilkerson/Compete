@@ -112,11 +112,22 @@
                 </div>
             </div>
             
+            <a href="{% url 'leaderboard' %}" class="item">
+                <i class="trophy icon"></i> Leaderboard
+            </a>
+            
             {% if user.is_authenticated %}
                 <a href="{% url 'profile' %}" class="item">
                     <i class="user icon"></i> Profile
                 </a>
                 <div class="right menu">
+                    {% if user_rank %}
+                    <div class="item">
+                        <span style="color: #FFD700;">
+                            <i class="trophy icon"></i> Rank #{{ user_rank }}
+                        </span>
+                    </div>
+                    {% endif %}
                     <div class="item">
                         <span style="color: #21ba45;">
                             <i class="circle icon"></i> {{ user.username }}
@@ -156,7 +167,6 @@
                 <div class="four wide column">
                     <h4 class="ui inverted header">Resources</h4>
                     <div class="ui inverted link list">
-                        <a class="item" href="{% url 'documentation' %}">Documentation</a>
                     </div>
                 </div>
             </div>
