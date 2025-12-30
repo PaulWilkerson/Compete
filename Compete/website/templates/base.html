@@ -123,15 +123,15 @@
                 <div class="right menu">
                     {% if user_rank %}
                     <div class="item">
-                        <span style="color: #FFD700;">
+                        <div class="ui yellow label">
                             <i class="trophy icon"></i> Rank #{{ user_rank }}
-                        </span>
+                        </div>
                     </div>
                     {% endif %}
                     <div class="item">
-                        <span style="color: #21ba45;">
-                            <i class="circle icon"></i> {{ user.username }}
-                        </span>
+                        <div class="ui green label">
+                            <i class="user icon"></i> {{ user.username }}
+                        </div>
                     </div>
                     <a href="{% url 'logout' %}" class="item">
                         <i class="sign out icon"></i> Logout
