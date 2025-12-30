@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}Leaderboard - Compete CTF{% endblock %}
+
+{% block content %}
+<div class="ui container main-container">
+    <!-- Leaderboard Header -->
+    <div class="ui segment ctf-card">
+        <h1 class="ui header center aligned">
+            <i class="trophy icon"></i>
+            <div class="content">
+                Global Leaderboard
+                <div class="sub header">Top 100 Competitors</div>
+            </div>
+        </h1>
+    </div>
+
+    <!-- Current User's Rank (if authenticated and not in top 100) -->
+    {% if user.is_authenticated and user_rank and user_rank > 100 %}
+    <div class="ui segment ctf-card" style="margin-top: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <div class="ui stackable grid">
+            <div class="two wide column center aligned">
+                <h2 style="color: white; margin: 0;">#{{ user_rank }}</h2>
+            </div>
+            <div class="ten wide column">
+                <h3 style="color: white; margin: 0;">
+                    <i class="user icon"></i> {{ user.username }} (You)
+                </h3>
+                <p style="margin: 5px 0 0 0; opacity: 0.9;">
+                    <i class="check circle icon"></i> {{ user_challenges_solved }} challenges • 
+                    <i class="star icon"></i> {{ user_points }} points
+                </p>
+            </div>
+            <div class="four wide column center aligned">
+                <div style="font-size: 2em; color: white;">
+                    {{ user_points }}
+                </div>
+                <div style="opacity: 0.9;">Points</div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Leaderboard Table -->
+    <div class="ui segment ctf-card" style="margin-top: 20px;">
+        {% if leaderboard %}
+            <table class="ui selectable striped table">
+                <thead>
+                    <tr>
+                        <th class="center aligned" style="width: 80px;">Rank</th>
+                        <th>Username</th>
+                        <th class="center aligned">Challenges Solved</th>
+                        <th class="center aligned">Total Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in leaderboard %}
+                        <tr {% if user.is_authenticated and entry.username == user.username %}style="background-color: rgba(102, 126, 234, 0.1);"{% endif %}>
+                            <td class="center aligned">
+                                {% if entry.rank == 1 %}
+                                    <h3 style="margin: 0; color: #FFD700;">
+                                        <i class="trophy icon"></i> #{{ entry.rank }}
+                                    </h3>
+                                {% elif entry.rank == 2 %}
+                                    <h3 style="margin: 0; color: #C0C0C0;">
+                                        <i class="trophy icon"></i> #{{ entry.rank }}
+                                    </h3>
+                                {% elif entry.rank == 3 %}
+                                    <h3 style="margin: 0; color: #CD7F32;">
+                                        <i class="trophy icon"></i> #{{ entry.rank }}
+                                    </h3>
+                                {% else %}
+                                    <strong>#{{ entry.rank }}</strong>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <h4 class="ui header" style="margin: 5px 0;">
+                                    <i class="user circle icon"></i>
+                                    <a href="{% url 'user_profile' entry.username %}" style="color: inherit;">
+                                        {{ entry.username }}
+                                    </a>
+                                    {% if user.is_authenticated and entry.username == user.username %}
+                                        <span class="ui tiny primary label">You</span>
+                                    {% endif %}
+                                </h4>
+                            </td>
+                            <td class="center aligned">
+                                <div class="ui statistic" style="margin: 0;">
+                                    <div class="value" style="font-size: 1.5em;">
+                                        {{ entry.challenges_solved }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="center aligned">
+                                <div class="ui statistic" style="margin: 0;">
+                                    <div class="value" style="font-size: 1.5em; color: #667eea;">
+                                        {{ entry.total_points }}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="ui message">
+                <div class="header">
+                    No competitors yet!
+                </div>
+                <p>Be the first to solve challenges and claim the top spot on the leaderboard.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Legend -->
+    <div class="ui segment ctf-card" style="margin-top: 20px;">
+        <h3 class="ui header">
+            <i class="info circle icon"></i>
+            How Rankings Work
+        </h3>
+        <div class="ui list">
+            <div class="item">
+                <i class="star icon"></i>
+                <div class="content">
+                    Rankings are based on total points earned from solved challenges
+                </div>
+            </div>
+            <div class="item">
+                <i class="trophy icon"></i>
+                <div class="content">
+                    In case of tie, the user who reached that score first is ranked higher
+                </div>
+            </div>
+            <div class="item">
+                <i class="refresh icon"></i>
+                <div class="content">
+                    Leaderboard updates in real-time as challenges are solved
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

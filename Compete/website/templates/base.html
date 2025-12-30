@@ -63,6 +63,9 @@
                 Compete CTF
             </a>
             <a href="{% url 'home' %}" class="item">Home</a>
+            <a href="{% url 'leaderboard' %}" class="item">
+                <i class="trophy icon"></i> Leaderboard
+            </a>
             
             <!-- Cyber Challenges Dropdown -->
             <div class="ui dropdown item">
@@ -153,10 +156,15 @@
                     </h4>
                     <p>Challenge yourself. Learn cybersecurity. Compete with the best.</p>
                 </div>
-                <div class="four wide column">
-                    <h4 class="ui inverted header">Resources</h4>
+                <div class="eight wide column">
+                    <h4 class="ui inverted header">Legal</h4>
                     <div class="ui inverted link list">
-                        <a class="item" href="{% url 'documentation' %}">Documentation</a>
+                        <a href="{% url 'privacy_policy' %}" class="item">
+                            <i class="shield alternate icon"></i> Privacy Policy
+                        </a>
+                        <a href="{% url 'terms_of_service' %}" class="item">
+                            <i class="file alternate icon"></i> Terms of Service
+                        </a>
                     </div>
                 </div>
             </div>

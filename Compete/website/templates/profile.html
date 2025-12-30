@@ -9,15 +9,17 @@
         <div class="ui stackable grid">
             <div class="four wide column center aligned">
                 <div class="ui circular image" style="width: 150px; height: 150px; margin: 0 auto; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
-                    <h1 style="color: white; font-size: 3em; margin: 0;">{{ user.username|slice:":1"|upper }}</h1>
+                    <h1 style="color: white; font-size: 3em; margin: 0;">{{ profile_user.username|slice:":1"|upper }}</h1>
                 </div>
             </div>
             <div class="twelve wide column">
                 <h1 class="ui header">
-                    {{ user.username }}
-                    <div class="sub header">
-                        <i class="mail icon"></i> {{ user.email }}
-                    </div>
+                    {{ profile_user.username }}
+                    {% if is_own_profile %}
+                        <div class="sub header">
+                            <i class="mail icon"></i> {{ profile_user.email }}
+                        </div>
+                    {% endif %}
                 </h1>
                 
                 {% if objects %}
@@ -51,18 +53,20 @@
                     {% endfor %}
                 {% endif %}
                 
-                <div style="margin-top: 20px;">
-                    <a href="{% url 'update_profile' %}" class="ui primary button">
-                        <i class="edit icon"></i>
-                        Edit Profile
-                    </a>
-                </div>
+                {% if is_own_profile %}
+                    <div style="margin-top: 20px;">
+                        <a href="{% url 'update_profile' %}" class="ui primary button">
+                            <i class="edit icon"></i>
+                            Edit Profile
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
 
     <!-- Stats Overview -->
-    <div class="ui two column stackable grid" style="margin-top: 30px;">
+    <div class="ui three column stackable grid" style="margin-top: 30px;">
         <div class="column">
             <div class="ui segment ctf-card center aligned">
                 <div class="ui statistic">
@@ -81,6 +85,27 @@
                     </div>
                     <div class="label">Total Points</div>
                 </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="ui segment ctf-card center aligned">
+                <div class="ui statistic">
+                    <div class="value" style="{% if user_rank and user_rank <= 3 %}color: #FFD700;{% elif user_rank and user_rank <= 10 %}color: #667eea;{% endif %}">
+                        {% if user_rank %}
+                            <i class="{% if user_rank == 1 %}trophy{% else %}ranking{% endif %} icon"></i> #{{ user_rank }}
+                        {% else %}
+                            <i class="minus icon"></i>
+                        {% endif %}
+                    </div>
+                    <div class="label">Global Rank</div>
+                </div>
+                {% if user_rank %}
+                    <div style="margin-top: 10px;">
+                        <a href="{% url 'leaderboard' %}" class="ui tiny button">
+                            <i class="trophy icon"></i> View Leaderboard
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
