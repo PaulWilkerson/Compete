@@ -12,7 +12,7 @@ def user_rank(request):
             total_points=Sum('solved_challenges__points')
         ).filter(
             total_points__gt=0
-        ).order_by('-total_points')
+        ).order_by('-total_points', 'id')  # Secondary sort by id for deterministic ordering
         
         # Find current user's rank
         current_user_rank = None

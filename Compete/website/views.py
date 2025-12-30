@@ -76,7 +76,7 @@ def leaderboard(request):
         total_challenges=Count('solved_challenges')
     ).filter(
         total_points__gt=0
-    ).order_by('-total_points')[:100]
+    ).order_by('-total_points', 'id')[:100]  # Secondary sort by id for deterministic ordering
     
     # Convert to list and add ranks
     top_100_users = []
@@ -95,7 +95,7 @@ def leaderboard(request):
             total_points=Sum('solved_challenges__points')
         ).filter(
             total_points__gt=0
-        ).order_by('-total_points')
+        ).order_by('-total_points', 'id')  # Secondary sort by id for deterministic ordering
         
         for i, user in enumerate(user_with_rank):
             if user == request.user:
