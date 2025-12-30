@@ -10,8 +10,6 @@ from .models import Account, SolvedChallenge
 def home(request):
     return render(request, 'home.html', {  } )
 
-def documentation(request):
-    return render(request, 'documentation.html', {  } )
 @csrf_protect
 def signup(request):
     if request.method == 'POST':
