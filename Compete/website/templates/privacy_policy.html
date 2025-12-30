@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% block title %}Privacy Policy - Compete CTF{% endblock %}
+
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui segment ctf-card">
+        <h1 class="ui header">
+            <i class="shield alternate icon"></i>
+            Privacy Policy
+        </h1>
+        <div class="ui divider"></div>
+        
+        <p><strong>Last Updated:</strong> December 30, 2024</p>
+        
+        <h2 class="ui header">1. Introduction</h2>
+        <p>
+            Compete CTF ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, 
+            disclose, and safeguard your information when you use our Capture The Flag platform. Please read this policy carefully.
+        </p>
+        
+        <h2 class="ui header">2. Information We Collect</h2>
+        
+        <h3 class="ui header">2.1 Information You Provide</h3>
+        <p>When you register for an account, we collect:</p>
+        <ul class="ui list">
+            <li><strong>Username:</strong> Your chosen display name for the platform</li>
+            <li><strong>Email Address:</strong> Used for account verification, password resets, and important platform notifications</li>
+            <li><strong>Password:</strong> Securely hashed and stored using industry-standard encryption</li>
+            <li><strong>Profile Information:</strong> Optional information such as first name, last name, about section, and website URL</li>
+        </ul>
+        
+        <h3 class="ui header">2.2 Automatically Collected Information</h3>
+        <p>When you use the platform, we automatically collect:</p>
+        <ul class="ui list">
+            <li><strong>Challenge Activity:</strong> Records of challenges you attempt and solve, including timestamps and earned points</li>
+            <li><strong>Usage Data:</strong> Information about how you interact with the platform, including pages visited and features used</li>
+            <li><strong>Technical Information:</strong> IP address, browser type, device information, and session data for security and platform functionality</li>
+        </ul>
+        
+        <h3 class="ui header">2.3 Cookies and Tracking</h3>
+        <p>
+            We use cookies and similar tracking technologies to maintain your session, remember your preferences, and improve platform functionality. 
+            These are essential for the platform to work correctly.
+        </p>
+        
+        <h2 class="ui header">3. How We Use Your Information</h2>
+        <p>We use the collected information for the following purposes:</p>
+        <ul class="ui list">
+            <li><strong>Account Management:</strong> To create, maintain, and secure your user account</li>
+            <li><strong>Platform Functionality:</strong> To provide access to challenges, track your progress, and display leaderboards</li>
+            <li><strong>Authentication:</strong> To verify your identity and manage login sessions</li>
+            <li><strong>Communication:</strong> To send password reset emails and important platform updates</li>
+            <li><strong>Security:</strong> To detect, prevent, and respond to security incidents, abuse, and fraudulent activity</li>
+            <li><strong>Performance Monitoring:</strong> To analyze platform usage and improve our services</li>
+            <li><strong>Leaderboards:</strong> To display your username, points, and ranking in competition with other users</li>
+        </ul>
+        
+        <h2 class="ui header">4. Information Sharing and Disclosure</h2>
+        
+        <h3 class="ui header">4.1 Public Information</h3>
+        <p>The following information is publicly visible on the platform:</p>
+        <ul class="ui list">
+            <li>Your username</li>
+            <li>Your leaderboard position and total points</li>
+            <li>Challenge completion statistics (if you choose to make your profile public)</li>
+        </ul>
+        
+        <h3 class="ui header">4.2 Information We Don't Share</h3>
+        <p>We do NOT sell, rent, or trade your personal information to third parties. We will not share your information except:</p>
+        <ul class="ui list">
+            <li>When required by law or legal process</li>
+            <li>To protect the rights, property, or safety of Compete CTF, our users, or the public</li>
+            <li>With your explicit consent</li>
+        </ul>
+        
+        <h2 class="ui header">5. Data Security</h2>
+        <p>We implement security measures to protect your information:</p>
+        <ul class="ui list">
+            <li><strong>Password Security:</strong> Passwords are hashed using Django's built-in secure password hashing (PBKDF2 with SHA256)</li>
+            <li><strong>HTTPS Encryption:</strong> All data transmission is encrypted using SSL/TLS in production environments</li>
+            <li><strong>CSRF Protection:</strong> Cross-Site Request Forgery protection is enabled on all forms</li>
+            <li><strong>SQL Injection Protection:</strong> We use Django's ORM to prevent SQL injection attacks</li>
+            <li><strong>Access Controls:</strong> Strict authentication and authorization controls limit access to user data</li>
+        </ul>
+        <p>
+            However, no method of transmission over the Internet or electronic storage is 100% secure. While we strive to use commercially 
+            acceptable means to protect your information, we cannot guarantee absolute security.
+        </p>
+        
+        <h2 class="ui header">6. Your Rights and Choices</h2>
+        
+        <h3 class="ui header">6.1 Access and Update</h3>
+        <p>
+            You can access and update your profile information at any time through your account settings. You have the right to review 
+            and modify your personal information.
+        </p>
+        
+        <h3 class="ui header">6.2 Account Deletion</h3>
+        <p>
+            You may request deletion of your account at any time by contacting us. Upon account deletion, your personal information will be 
+            removed from our active databases, though some information may be retained in backups for a limited period.
+        </p>
+        
+        <h3 class="ui header">6.3 Data Portability</h3>
+        <p>
+            You have the right to request a copy of your personal data in a structured, machine-readable format.
+        </p>
+        
+        <h2 class="ui header">7. Data Retention</h2>
+        <p>
+            We retain your personal information for as long as your account is active or as needed to provide you services. 
+            If you delete your account, we will delete or anonymize your information within a reasonable timeframe, except where 
+            we are required to retain it for legal obligations.
+        </p>
+        
+        <h2 class="ui header">8. Children's Privacy</h2>
+        <p>
+            Our platform is not directed to individuals under the age of 13. We do not knowingly collect personal information from children under 13. 
+            If you are a parent or guardian and believe your child has provided us with personal information, please contact us.
+        </p>
+        
+        <h2 class="ui header">9. Third-Party Services</h2>
+        <p>
+            Our platform uses the following third-party services:
+        </p>
+        <ul class="ui list">
+            <li><strong>Semantic UI (CDN):</strong> For user interface styling</li>
+            <li><strong>jQuery (CDN):</strong> For interactive functionality</li>
+        </ul>
+        <p>
+            These services may collect information as described in their respective privacy policies. We do not control third-party tracking technologies.
+        </p>
+        
+        <h2 class="ui header">10. Changes to This Privacy Policy</h2>
+        <p>
+            We may update this Privacy Policy from time to time to reflect changes in our practices or for legal, operational, or regulatory reasons. 
+            We will notify you of any material changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.
+        </p>
+        
+        <h2 class="ui header">11. International Users</h2>
+        <p>
+            If you are accessing the platform from outside the country where our servers are located, please be aware that your information 
+            may be transferred to, stored, and processed in a location where data protection laws may differ from those in your country.
+        </p>
+        
+        <h2 class="ui header">12. Contact Us</h2>
+        <p>
+            If you have questions or concerns about this Privacy Policy or our data practices, please contact us through our platform 
+            or visit our <a href="{% url 'documentation' %}">Documentation</a> page.
+        </p>
+        
+        <div class="ui warning message" style="margin-top: 30px;">
+            <div class="header">
+                <i class="exclamation triangle icon"></i>
+                Your Consent
+            </div>
+            <p>
+                By using Compete CTF, you consent to the collection, use, and processing of your information as described in this Privacy Policy. 
+                If you do not agree with this policy, please do not use our platform.
+            </p>
+        </div>
+        
+        <div class="ui info message">
+            <div class="header">
+                <i class="question circle icon"></i>
+                Questions About Your Data?
+            </div>
+            <p>
+                We take your privacy seriously. If you have any questions about how we handle your data or wish to exercise your rights, 
+                please don't hesitate to reach out to us. See also our <a href="{% url 'tos' %}">Terms of Service</a> for more information 
+                about platform usage.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

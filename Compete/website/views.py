@@ -12,6 +12,12 @@ def home(request):
 
 def documentation(request):
     return render(request, 'documentation.html', {  } )
+
+def tos(request):
+    return render(request, 'tos.html', {  } )
+
+def privacy_policy(request):
+    return render(request, 'privacy_policy.html', {  } )
 @csrf_protect
 def signup(request):
     if request.method == 'POST':

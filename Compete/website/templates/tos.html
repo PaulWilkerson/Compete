@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block title %}Terms of Service - Compete CTF{% endblock %}
+
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui segment ctf-card">
+        <h1 class="ui header">
+            <i class="file alternate icon"></i>
+            Terms of Service
+        </h1>
+        <div class="ui divider"></div>
+        
+        <p><strong>Last Updated:</strong> December 30, 2024</p>
+        
+        <h2 class="ui header">1. Acceptance of Terms</h2>
+        <p>
+            By accessing and using the Compete CTF platform, you accept and agree to be bound by the terms and provisions of this agreement. 
+            If you do not agree to these terms, please do not use this service.
+        </p>
+        
+        <h2 class="ui header">2. Description of Service</h2>
+        <p>
+            Compete CTF is an online platform that provides Capture The Flag (CTF) challenges in multiple categories including:
+        </p>
+        <ul class="ui list">
+            <li>Cyber Security challenges (web exploitation, cryptography, reverse engineering, binary exploitation, forensics)</li>
+            <li>Command Line Interface (CLI) challenges</li>
+            <li>Programming challenges</li>
+        </ul>
+        <p>
+            The platform allows users to practice cybersecurity skills, track their progress, and compete with others on global leaderboards.
+        </p>
+        
+        <h2 class="ui header">3. User Accounts</h2>
+        <h3 class="ui header">3.1 Registration</h3>
+        <p>
+            To access certain features of the platform, you must create an account. You agree to provide accurate, current, and complete information 
+            during the registration process and to update such information to keep it accurate, current, and complete.
+        </p>
+        
+        <h3 class="ui header">3.2 Account Security</h3>
+        <p>
+            You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. 
+            You agree to notify us immediately of any unauthorized use of your account.
+        </p>
+        
+        <h3 class="ui header">3.3 Account Termination</h3>
+        <p>
+            We reserve the right to suspend or terminate your account if you violate these terms or engage in activities that harm the platform or other users.
+        </p>
+        
+        <h2 class="ui header">4. Acceptable Use</h2>
+        <h3 class="ui header">4.1 Permitted Activities</h3>
+        <p>You are permitted to:</p>
+        <ul class="ui list">
+            <li>Access and attempt to solve CTF challenges provided on the platform</li>
+            <li>View your own profile, statistics, and challenge history</li>
+            <li>Compete on leaderboards and track your progress</li>
+            <li>Use knowledge gained for educational purposes</li>
+        </ul>
+        
+        <h3 class="ui header">4.2 Prohibited Activities</h3>
+        <p>You agree NOT to:</p>
+        <ul class="ui list">
+            <li>Attack or attempt to compromise the infrastructure of the Compete CTF platform itself</li>
+            <li>Share challenge solutions or flags publicly before challenges are retired</li>
+            <li>Use automated tools or bots to solve challenges or manipulate leaderboards</li>
+            <li>Create multiple accounts to gain unfair advantages</li>
+            <li>Attempt to access other users' accounts or private information</li>
+            <li>Use the platform to distribute malware or conduct attacks on external systems</li>
+            <li>Engage in any activity that disrupts or interferes with the platform's services</li>
+            <li>Reverse engineer the platform's code or infrastructure (except where challenges explicitly permit this)</li>
+        </ul>
+        
+        <h2 class="ui header">5. Challenge Content and Solutions</h2>
+        <p>
+            All challenge content, flags, and related materials are the property of Compete CTF. While you may discuss general approaches and 
+            techniques, sharing exact solutions or flags for active challenges is prohibited and may result in account suspension.
+        </p>
+        
+        <h2 class="ui header">6. Intellectual Property</h2>
+        <p>
+            The platform, including its design, code, challenges, and content, is protected by copyright and other intellectual property laws. 
+            You may not copy, modify, distribute, or create derivative works based on the platform without express permission.
+        </p>
+        
+        <h2 class="ui header">7. Educational Purpose</h2>
+        <p>
+            This platform is intended solely for educational purposes to help users learn and practice cybersecurity skills in a legal and controlled environment. 
+            Any knowledge or techniques learned must only be used ethically and legally. We do not condone or support any illegal hacking activities.
+        </p>
+        
+        <h2 class="ui header">8. Disclaimer of Warranties</h2>
+        <p>
+            The platform is provided "as is" without warranties of any kind, either express or implied. We do not guarantee that the platform will be 
+            uninterrupted, secure, or error-free. You use the platform at your own risk.
+        </p>
+        
+        <h2 class="ui header">9. Limitation of Liability</h2>
+        <p>
+            Compete CTF and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from 
+            your use or inability to use the platform, even if we have been advised of the possibility of such damages.
+        </p>
+        
+        <h2 class="ui header">10. Privacy</h2>
+        <p>
+            Your use of the platform is also governed by our <a href="{% url 'privacy_policy' %}">Privacy Policy</a>. Please review it to understand 
+            how we collect, use, and protect your information.
+        </p>
+        
+        <h2 class="ui header">11. Changes to Terms</h2>
+        <p>
+            We reserve the right to modify these terms at any time. Changes will be effective immediately upon posting to the platform. 
+            Your continued use of the platform after changes are posted constitutes your acceptance of the modified terms.
+        </p>
+        
+        <h2 class="ui header">12. Governing Law</h2>
+        <p>
+            These terms shall be governed by and construed in accordance with applicable laws, without regard to conflict of law provisions.
+        </p>
+        
+        <h2 class="ui header">13. Contact Information</h2>
+        <p>
+            If you have questions about these Terms of Service, please contact us through our platform or visit our 
+            <a href="{% url 'documentation' %}">Documentation</a> page.
+        </p>
+        
+        <div class="ui info message" style="margin-top: 30px;">
+            <div class="header">
+                <i class="info circle icon"></i>
+                Important Notice
+            </div>
+            <p>
+                By using Compete CTF, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. 
+                This is a legally binding agreement between you and the Compete CTF platform.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

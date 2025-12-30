@@ -18,4 +18,6 @@ urlpatterns = [
     path('account/profile/', views.profile, name='profile'),
     path('account/update_profile/', views.update_profile, name='update_profile'),
     path('documentation/', views.documentation, name='documentation'),
+    path('terms-of-service/', views.tos, name='tos'),
+    path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
 ]
