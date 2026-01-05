@@ -119,15 +119,15 @@ WSGI_APPLICATION = "Compete.wsgi.application"
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 # Use PostgreSQL in production, SQLite in development
-if config('USE_POSTGRESQL', default=True, cast=bool):
+if config('USE_POSTGRESQL', default=False, cast=bool):
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": config('DB_NAME', default='compete_db'),
-            "USER": config('DB_USER', default='postgres'),
-            "PASSWORD": config('DB_PASSWORD', default='Pfw02967+890,/'),
-            "HOST": config('DB_HOST', default='localhost'),
-            "PORT": config('DB_PORT', default=5432, cast=int),
+            "NAME": config('DB_NAME', default=os.getenv('DATABASE_NAME', 'compete_db')),
+            "USER": config('DB_USER', default=os.getenv('DATABASE_USER', 'postgres')),
+            "PASSWORD": config('DB_PASSWORD', default=os.getenv('DATABASE_PASSWORD', 'LA8Yz4sXpbsV6e')),
+            "HOST": config('DB_HOST', default=os.getenv('DATABASE_HOST', 'localhost')),
+            "PORT": config('DB_PORT', default=os.getenv('DATABASE_PORT', 5432), cast=int),
             'CONN_MAX_AGE': 600,
             'OPTIONS': {
                 'connect_timeout': 10,
