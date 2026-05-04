@@ -1,0 +1,23 @@
+FROM judge0/judge0:1.13.1
+
+# Switch to root to modify system files
+USER root
+
+# Fix Debian Buster repositories (still needed)
+RUN cat > /etc/apt/sources.list <<EOF
+deb http://archive.debian.org/debian/ buster main contrib non-free
+deb http://archive.debian.org/debian/ buster-updates main contrib non-free
+deb http://archive.debian.org/debian-security/ buster/updates main contrib non-free
+EOF
+
+# Disable validity check for old archived repos
+RUN echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until
+
+# Install docker.io
+#RUN apt-get update && \
+    #apt-get install -y --no-install-recommends docker.io && \
+    #apt-get clean && \
+    #rm -rf /var/lib/apt/lists/*
+
+# (Optional) Switch back to judge0 user if needed by the application
+# USER judge0

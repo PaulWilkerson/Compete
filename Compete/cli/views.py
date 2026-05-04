@@ -5,7 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from website.models import SolvedChallenge
 from django.views.decorators.http import require_POST
-
+from programming.judge0_service import Judge0Service
 @login_required
 def challenge_list(request):
     challenges = NewCLIChallenge.objects.all()
@@ -25,7 +25,7 @@ def challenge_list(request):
         'solved_count': solved_count,
         'remaining_count': remaining_count
     })
-
+@login_required
 def challenge_detail(request, challenge_id):
     challenge = get_object_or_404(NewCLIChallenge, id=challenge_id)
     
@@ -79,6 +79,34 @@ def challenge_detail(request, challenge_id):
         'already_solved': already_solved,
         'total_solves': total_solves
     })
+
+@login_required
+@require_POST
+def execute_code(request, challenge_id):
+    """Execute code using self-hosted Judge0 API"""
+    try:
+        code = request.POST.get('code', '').strip()
+        language = request.POST.get('language', 'Bash')
+        stdin = request.POST.get('stdin', '')
+
+        if not code:
+            return JsonResponse({
+                'success': False,
+                'error': 'Code cannot be empty'
+            })
+
+        # Execute code using Judge0
+        judge0 = Judge0Service()
+        result = judge0.execute_code(code, language, stdin)
+
+        return JsonResponse(result)
+
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': f'An error occurred: {str(e)}'
+        })
+
 def new_challenge(request):
     if request.method == 'POST':
         form = CLIChallengeForm(request.POST)

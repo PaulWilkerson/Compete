@@ -29,15 +29,15 @@
 
     <!-- Filter Section -->
     <div class="ui segment ctf-card" style="margin-top: 20px;">
-        <form class="ui form">
+        <form class="ui form" method="GET">
             <div class="three fields">
                 <div class="field">
                     <label>Difficulty</label>
-                    <select class="ui dropdown" id="difficultyFilter">
-                        <option value="">All Difficulties</option>
-                        <option value="Easy">Easy</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Hard">Hard</option>
+                    <select class="ui dropdown" id="difficultyFilter"name="difficulty" id="difficultyFilter" onchange="this.form.submit()" >
+                        <option value="" onchange="this.form.submit()">All Difficulties</option>
+                        <option value="Easy" onchange="this.form.submit()">Easy</option>
+                        <option value="Medium" onchange="this.form.submit()">Medium</option>
+                        <option value="Hard" onchange="this.form.submit()">Hard</option>
                     </select>
                 </div>
                 <div class="field">
@@ -54,7 +54,7 @@
                 <div class="field">
                     <label>Search</label>
                     <div class="ui icon input">
-                        <input type="text" placeholder="Search challenges..." id="searchBox">
+                        <input type="text" placeholder="Search challenges..." onchange="this.form.submit()" id="searchBox">
                         <i class="search icon"></i>
                     </div>
                 </div>
@@ -153,31 +153,37 @@ $(document).ready(function() {
     
     // Filter functionality
     function filterChallenges() {
-        var difficulty = $('#difficultyFilter').val().toLowerCase();
-        var category = $('#categoryFilter').val().toLowerCase();
+        var difficulty = $('#difficultyFilter').val();
+        var category = $('#categoryFilter').val();
         var search = $('#searchBox').val().toLowerCase();
         
         $('.challenge-card').each(function() {
             var card = $(this);
-            var cardDifficulty = card.data('difficulty').toLowerCase();
-            var cardCategory = card.data('category').toLowerCase();
+            var cardDifficulty = card.attr('data-difficulty');
+            var cardCategory = card.attr('data-category');
             var cardText = card.text().toLowerCase();
             
             var showCard = true;
             
-            if (difficulty && cardDifficulty !== difficulty) showCard = false;
-            if (category && cardCategory !== category) showCard = false;
-            if (search && !cardText.includes(search)) showCard = false;
+            if (difficulty && difficulty.length > 0 && cardDifficulty !== difficulty) {
+                showCard = false;
+            }
+            if (category && category.length > 0 && cardCategory !== category) {
+                showCard = false;
+            }
+            if (search && search.length > 0 && !cardText.includes(search)) {
+                showCard = false;
+            }
             
             if (showCard) {
-                card.parent().show();
+                card.show();
             } else {
-                card.parent().hide();
+                card.hide();
             }
         });
     }
     
-    $('#difficultyFilter, #categoryFilter').change(filterChallenges);
+    $('#difficultyFilter, #categoryFilter').on('change', filterChallenges);
     $('#searchBox').on('input', filterChallenges);
 });
 </script>

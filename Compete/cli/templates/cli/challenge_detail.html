@@ -72,6 +72,7 @@
 
             <!-- Terminal Emulator -->
             <div class="ui segment ctf-card" style="margin-top: 20px; background: #1e1e1e;">
+                {% csrf_token %}
                 <h3 class="ui header" style="color: white;">
                     <i class="terminal icon"></i>
                     Terminal Emulator
@@ -80,10 +81,19 @@
                 <div id="terminal" style="background: #000; color: #00ff00; padding: 15px; font-family: 'Courier New', monospace; min-height: 300px; border-radius: 5px; overflow-y: auto;">
                     <div id="terminalOutput"><span style="color: #00ff00;">user@compete:~$</span> <span id="commandInput" contenteditable="true" style="outline: none;"></span></div>
                 </div>
+                </br>
+                <button class="ui primary button" onclick="runCode()">
+                    <i class="play icon"></i>
+                    Run Code
+                </button>
+                <div id="codeOutput" class="ui message" style="margin-top: 15px; display: none;">
+                    <div class="header">Output:</div>
+                    <pre id="outputContent" style="background: #f4f4f4; padding: 10px; margin-top: 10px;"></pre>
+                </div>
                 <div class="ui message" style="margin-top: 15px;">
                     <i class="info circle icon"></i>
                     <strong>Quick Commands:</strong> ls, cd, cat, grep, pwd, echo
-                    <br><small>(Note: This is a simulated terminal for demonstration purposes)</small>
+                    <br><small>(Note: This terminal is boxed into a container for safety purposes)</small>
                 </div>
             </div>
 
@@ -287,114 +297,6 @@ $(document).ready(function() {
         e.preventDefault();
         focusTerminal();
     });
-    
-    function executeCommand(cmd) {
-        var parts = cmd.trim().split(/\s+/);
-        var command = parts[0].toLowerCase();
-        
-        switch(command) {
-            case 'ls':
-                if (currentDirectory === '/home/user') {
-                    if (parts.length > 1 && (parts[1] === 'secret' || parts[1] === 'secret/')) {
-                        return 'flag.txt  note.txt';
-                    }
-                    return 'file1.txt  file2.txt  secret/';
-                } else if (currentDirectory === '/home/user/secret') {
-                    return 'flag.txt  note.txt';
-                }
-                return '';
-            case 'pwd':
-                return currentDirectory;
-            case 'whoami':
-                return 'user';
-            case 'echo':
-                return parts.slice(1).join(' ');
-            case 'cat':
-                if (parts.length > 1) {
-                    var filename = parts[1];
-                    // Handle relative and absolute paths
-                    if (currentDirectory === '/home/user/secret') {
-                        if (filename === 'flag.txt') {
-                            filename = 'secret/flag.txt';
-                        } else if (filename === 'note.txt') {
-                            filename = 'secret/note.txt';
-                        }
-                    }
-                    
-                    switch(filename) {
-                        case 'file1.txt':
-                            return 'This is the content of file1.txt\nNothing interesting here...';
-                        case 'file2.txt':
-                            return 'Welcome to the CTF challenge!\nKeep exploring to find the flag.';
-                        case 'secret/flag.txt':
-                        case 'flag.txt':
-                            if (currentDirectory === '/home/user/secret' || filename.includes('secret/')) {
-                                return '{{ challenge.flag }}';
-                            }
-                            return 'cat: ' + filename + ': No such file or directory';
-                        case 'secret/note.txt':
-                        case 'note.txt':
-                            if (currentDirectory === '/home/user/secret' || filename.includes('secret/')) {
-                                return 'Hint: Check all files in this directory';
-                            }
-                            return 'cat: ' + filename + ': No such file or directory';
-                        default:
-                            return 'cat: ' + filename + ': No such file or directory';
-                    }
-                }
-                return 'cat: missing file operand';
-            case 'cd':
-                if (parts.length === 1 || parts[1] === '~') {
-                    currentDirectory = '/home/user';
-                    return '';
-                } else {
-                    var target = parts[1];
-                    if (target === 'secret' || target === 'secret/') {
-                        if (currentDirectory === '/home/user') {
-                            currentDirectory = '/home/user/secret';
-                            return '';
-                        }
-                    } else if (target === '..' || target === '../') {
-                        if (currentDirectory === '/home/user/secret') {
-                            currentDirectory = '/home/user';
-                            return '';
-                        } else if (currentDirectory === '/home/user') {
-                            currentDirectory = '/home';
-                            return '';
-                        }
-                    } else if (target === '/') {
-                        currentDirectory = '/';
-                        return '';
-                    } else if (target === '/home/user' || target === '/home/user/') {
-                        currentDirectory = '/home/user';
-                        return '';
-                    } else if (target === '/home/user/secret' || target === '/home/user/secret/') {
-                        currentDirectory = '/home/user/secret';
-                        return '';
-                    } else {
-                        return 'cd: ' + target + ': No such file or directory';
-                    }
-                }
-                return '';
-            case 'grep':
-                if (parts.length < 2) {
-                    return 'grep: missing pattern';
-                }
-                return 'grep: No matches found';
-            case 'help':
-                return 'Available commands: ls, pwd, whoami, echo, cat, cd, grep, help, clear';
-            case 'clear':
-                currentDirectory = '/home/user'; // Reset to home on clear
-                $('#terminalOutput').html(getPrompt() + ' <span id="commandInput" contenteditable="true" style="outline: none;"></span>');
-                focusTerminal();
-                return '';
-            case '':
-                return '';
-            default:
-                return command + ': command not found';
-        }
-    }
-    
     // Initial focus
     focusTerminal();
     
@@ -433,6 +335,52 @@ $(document).ready(function() {
         });
     });
 });
+function runCode() {
+    var code = $('#commandInput').text().trim();
+    var language = '{{ challenge.category }}';
+    var stdin = "";
+    if (!code) {
+        $('#outputContent').text("Error: No command entered.");
+        return;
+    }
+    $('#codeOutput').show();
+    $('#outputContent').html('<i class="spinner loading icon"></i> Executing command...');
+
+    $.ajax({
+        url: '{% url "execute_code" challenge_id=challenge.id %}',
+        type: 'POST',
+        data: {
+            'code': code,
+            'language': language,
+            'stdin': stdin,
+            'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+        },
+        success: function(response) {
+            var output = "";
+
+            if (response.stdout) {
+                output += "Output:\n" + response.stdout;
+            } else {
+                output += "Output:\n(no output)";
+            }
+
+            if (response.stderr) {
+                output += "\n\nError:\n" + response.stderr;
+            }
+
+            if (response.compile_output) {
+                output += "\n\nCompile Error:\n" + response.compile_output;
+            }
+
+            $('#outputContent').text(output);
+            console.log("Success:", response);
+        },
+        error: function(xhr, status, error) {
+            $('#outputContent').text("Connection Error: " + error);
+            console.error("AJAX Error:", status, error);
+        }
+    });
+}
 </script>
 {% endblock %}
 {% endblock %}

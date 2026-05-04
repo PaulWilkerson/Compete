@@ -1,17 +1,24 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import NewProgrammingChallenge
 from .forms import ChallengeForm
+from .judge0_service import Judge0Service
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from website.models import SolvedChallenge
 from django.views.decorators.http import require_POST
-
 @login_required
 def challenge_list(request):
     challenges = NewProgrammingChallenge.objects.all()
+    difficulty = request.GET.get('difficulty')
+    category = request.GET.get('category')
+    search_query = request.GET.get('search')
+    if difficulty:
+        challenges = challenges.filter(difficulty=difficulty)
+    if category:
+        challenges = challenges.filter(category=category)
+    if search_query:
+        challenges = challenges.filter(name__icontains=search_query)
     total_challenges = challenges.count()
-    
-    # Count solved challenges for current user
     solved_count = SolvedChallenge.objects.filter(
         user=request.user,
         challenge_type='programming'
@@ -25,7 +32,7 @@ def challenge_list(request):
         'solved_count': solved_count,
         'remaining_count': remaining_count
     })
-
+@login_required
 def challenge_detail(request, challenge_id):
     challenge = get_object_or_404(NewProgrammingChallenge, id=challenge_id)
     
@@ -79,6 +86,34 @@ def challenge_detail(request, challenge_id):
         'already_solved': already_solved,
         'total_solves': total_solves
     })
+
+@login_required
+@require_POST
+def execute_code(request):
+    """Execute code using self-hosted Judge0 API"""
+    try:
+        code = request.POST.get('code', '').strip()
+        language = request.POST.get('language', 'Python')
+        stdin = request.POST.get('stdin', '')
+        
+        if not code:
+            return JsonResponse({
+                'success': False,
+                'error': 'Code cannot be empty'
+            })
+        
+        # Execute code using Judge0
+        judge0 = Judge0Service()
+        result = judge0.execute_code(code, language, stdin)
+        
+        return JsonResponse(result)
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': f'An error occurred: {str(e)}'
+        })
+
 def new_challenge(request):
     if request.method == 'POST':
         form = ChallengeForm(request.POST)

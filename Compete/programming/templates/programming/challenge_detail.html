@@ -180,39 +180,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Tools & Resources -->
-            <div class="ui segment ctf-card" style="margin-top: 20px;">
-                <h3 class="ui header">
-                    <i class="wrench icon"></i>
-                    Useful Resources
-                </h3>
-                <div class="ui divider"></div>
-                <div class="ui relaxed list">
-                    <div class="item">
-                        <i class="book icon"></i>
-                        <div class="content">
-                            <a href="#" class="header">Documentation</a>
-                            <div class="description">{{ challenge.category }} Docs</div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <i class="code icon"></i>
-                        <div class="content">
-                            <a href="#" class="header">Code Examples</a>
-                            <div class="description">Sample solutions</div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <i class="comments icon"></i>
-                        <div class="content">
-                            <a href="#" class="header">Discussion</a>
-                            <div class="description">Get help</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Actions -->
             <div class="ui segment ctf-card" style="margin-top: 20px;">
                 <a href="{% url 'programming_challenge_list' %}" class="ui fluid button">
@@ -234,8 +201,46 @@
 <script>
 function runCode() {
     var code = $('#codeEditor').val();
+    var language = '{{ challenge.category }}';
+    var stdin = "";
+
     $('#codeOutput').show();
-    $('#outputContent').text('Code execution simulation:\n\n' + code + '\n\n(Note: Actual code execution requires backend integration)');
+    $('#outputContent').html('<i class="spinner loading icon"></i> Executing code...');
+
+    $.ajax({
+        url: '{% url "execute_code" %}',
+        type: 'POST',
+        data: {
+            'code': code,
+            'language': language,
+            'stdin': stdin,
+            'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+        },
+        success: function(response) {
+            var output = "";
+            
+            if (response.stdout) {
+                output += "Output:\n" + response.stdout;
+            } else {
+                output += "Output:\n(no output)";
+            }
+
+            if (response.stderr) {
+                output += "\n\nError:\n" + response.stderr;
+            }
+
+            if (response.compile_output) {
+                output += "\n\nCompile Error:\n" + response.compile_output;
+            }
+
+            $('#outputContent').text(output);
+            console.log("Success:", response);
+        },
+        error: function(xhr, status, error) {
+            $('#outputContent').text("Connection Error: " + error);
+            console.error("AJAX Error:", status, error);
+        }
+    });
 }
 
 function clearCode() {
@@ -257,18 +262,13 @@ $(document).ready(function() {
                 'csrfmiddlewaretoken': csrftoken
             },
             success: function(response) {
+                $('.ui.success.message, .ui.error.message').remove();
                 if (response.success) {
-                    $('.ui.success.message').remove();
-                    $('.ui.error.message').remove();
                     $('#flagForm').before('<div class="ui success message"><i class="check icon"></i>' + response.message + '</div>');
                     if (response.message.includes('earned')) {
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
+                        setTimeout(function() { location.reload(); }, 2000);
                     }
                 } else {
-                    $('.ui.error.message').remove();
-                    $('.ui.success.message').remove();
                     $('#flagForm').before('<div class="ui error message"><i class="times icon"></i>' + response.message + '</div>');
                 }
             },

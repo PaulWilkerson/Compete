@@ -119,14 +119,14 @@ WSGI_APPLICATION = "Compete.wsgi.application"
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 # Use PostgreSQL in production, SQLite in development
-if config('USE_POSTGRESQL', default=False, cast=bool):
+if config('USE_POSTGRESQL', default=True, cast=bool):
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": config('DB_NAME', default=os.getenv('DATABASE_NAME', 'compete_db')),
-            "USER": config('DB_USER', default=os.getenv('DATABASE_USER', 'postgres')),
-            "PASSWORD": config('DB_PASSWORD', default=os.getenv('DATABASE_PASSWORD', 'LA8Yz4sXpbsV6e')),
-            "HOST": config('DB_HOST', default=os.getenv('DATABASE_HOST', 'localhost')),
+            "USER": config('DB_USER', default=os.getenv('DATABASE_USER', 'compete_user')),
+            "PASSWORD": config('DB_PASSWORD', default=os.getenv('DATABASE_PASSWORD', 'Pfw02967+890,/')),
+            "HOST": config('DB_HOST', default=os.getenv('DATABASE_HOST', 'app_db')),
             "PORT": config('DB_PORT', default=os.getenv('DATABASE_PORT', 5432), cast=int),
             'CONN_MAX_AGE': 600,
             'OPTIONS': {
@@ -195,19 +195,20 @@ LOGIN_REDIRECT_URL = '/'
 # Email Configuration
 if config('USE_SMTP_EMAIL', default=True, cast=bool):
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
-    EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+    EMAIL_HOST = config('EMAIL_HOST', default='smtp.postmarkapp.com')
+    EMAIL_PORT = config('EMAIL_PORT', default=2525, cast=int)
     EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
-    EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
-    EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+    EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='39b7c6fa-45ae-4780-83b3-1daa9032f63b')
+    EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='39b7c6fa-45ae-4780-83b3-1daa9032f63b')
+    EMAIL_TIMEOUT = 10
 else:
     # Development: print emails to console
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     EMAIL_HOST = 'localhost'
     EMAIL_PORT = 1025
 
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@compete-ctf.com')
-SERVER_EMAIL = config('SERVER_EMAIL', default='server@compete-ctf.com')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='contact@compete-ctf.com')
+SERVER_EMAIL = config('SERVER_EMAIL', default='contact@compete-ctf.com')
 
 # Security Settings
 SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=True, cast=bool)
@@ -289,8 +290,10 @@ LOGGING = {
 }
 
 # Admin Configuration
-ADMINS = [('Admin', config('ADMIN_EMAIL', default='admin@compete-ctf.com'))]
+ADMINS = [('Admin', config('ADMIN_EMAIL', default='competectfcompetitions@gmail.com'))]
 MANAGERS = ADMINS
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#Judge0 Config
+JUDGE0_API_URL = "http://server:2358"

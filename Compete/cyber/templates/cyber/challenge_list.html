@@ -33,26 +33,26 @@
             <div class="three fields">
                 <div class="field">
                     <label>Difficulty</label>
-                    <select class="ui dropdown" id="difficultyFilter">
+                    <select class="ui dropdown" name="difficulty" id="difficultyFilter" onchange="this.form.submit()" id="difficultyFilter">
                         <option value="">All Difficulties</option>
-                        <option value="Easy">Easy</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Hard">Hard</option>
+                        <option name="category" id="difficultyFilter" onchange="this.form.submit()" value="Easy">Easy</option>
+                        <option value="Medium"name="category" id="difficultyFilter" onchange="this.form.submit()" >Medium</option>
+                        <option value="Hard" name="category" id="difficultyFilter" onchange="this.form.submit()">Hard</option>
                     </select>
                 </div>
                 <div class="field">
                     <label>Category</label>
                     <select class="ui dropdown" id="categoryFilter">
-                        <option value="">All Categories</option>
-                        <option value="Red Team">Red Team</option>
-                        <option value="Blue Team">Blue Team</option>
-                        <option value="Miscellaneous">Miscellaneous</option>
+                        <option value="" name="category" id="categoryFilter" onchange="this.form.submit()">All Categories</option>
+                        <option value="Red Team" name="category" id="categoryFilter" onchange="this.form.submit()">Red Team</option>
+                        <option value="Blue Team" name="category" id="categoryFilter" onchange="this.form.submit()">Blue Team</option>
+                        <option value="Miscellaneous" name="category" id="categoryFilter" onchange="this.form.submit()">Miscellaneous</option>
                     </select>
                 </div>
                 <div class="field">
                     <label>Search</label>
                     <div class="ui icon input">
-                        <input type="text" placeholder="Search challenges..." id="searchBox">
+                        <input type="text" placeholder="Search challenges..." name="search" id="searchBox">
                         <i class="search icon"></i>
                     </div>
                 </div>
@@ -151,31 +151,37 @@ $(document).ready(function() {
     
     // Filter functionality
     function filterChallenges() {
-        var difficulty = $('#difficultyFilter').val().toLowerCase();
-        var category = $('#categoryFilter').val().toLowerCase();
+        var difficulty = $('#difficultyFilter').val();
+        var category = $('#categoryFilter').val();
         var search = $('#searchBox').val().toLowerCase();
         
         $('.challenge-card').each(function() {
             var card = $(this);
-            var cardDifficulty = card.data('difficulty').toLowerCase();
-            var cardCategory = card.data('category').toLowerCase();
+            var cardDifficulty = card.attr('data-difficulty');
+            var cardCategory = card.attr('data-category');
             var cardText = card.text().toLowerCase();
             
             var showCard = true;
             
-            if (difficulty && cardDifficulty !== difficulty) showCard = false;
-            if (category && cardCategory !== category) showCard = false;
-            if (search && !cardText.includes(search)) showCard = false;
+            if (difficulty && difficulty.length > 0 && cardDifficulty !== difficulty) {
+                showCard = false;
+            }
+            if (category && category.length > 0 && cardCategory !== category) {
+                showCard = false;
+            }
+            if (search && search.length > 0 && !cardText.includes(search)) {
+                showCard = false;
+            }
             
             if (showCard) {
-                card.parent().show();
+                card.show();
             } else {
-                card.parent().hide();
+                card.hide();
             }
         });
     }
     
-    $('#difficultyFilter, #categoryFilter').change(filterChallenges);
+    $('#difficultyFilter, #categoryFilter').on('change', filterChallenges);
     $('#searchBox').on('input', filterChallenges);
 });
 </script>

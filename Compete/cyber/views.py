@@ -5,13 +5,20 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from website.models import SolvedChallenge
 from django.views.decorators.http import require_POST
-
 @login_required
 def challenge_list(request):
     challenges = NewCyberChallenge.objects.all()
+    difficulty = request.GET.get('difficulty')
+    category = request.GET.get('category')
+    search_query = request.GET.get('search')
+    if difficulty:
+        challenges = challenges.filter(difficulty=difficulty)
+    if category:
+        challenges = challenges.filter(category=category)
+    if search_query:
+        challenges = challenges.filter(name__icontains=search_query)
+
     total_challenges = challenges.count()
-    
-    # Count solved challenges for current user
     solved_count = SolvedChallenge.objects.filter(
         user=request.user,
         challenge_type='cyber'
@@ -25,7 +32,7 @@ def challenge_list(request):
         'solved_count': solved_count,
         'remaining_count': remaining_count
     })
-
+@login_required
 def challenge_detail(request, challenge_id):
     challenge = get_object_or_404(NewCyberChallenge, id=challenge_id)
     
