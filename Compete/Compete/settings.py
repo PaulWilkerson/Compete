@@ -125,7 +125,7 @@ if config('USE_POSTGRESQL', default=True, cast=bool):
             "ENGINE": "django.db.backends.postgresql",
             "NAME": config('DB_NAME', default=os.getenv('DATABASE_NAME', 'compete_db')),
             "USER": config('DB_USER', default=os.getenv('DATABASE_USER', 'compete_user')),
-            "PASSWORD": config('DB_PASSWORD', default=os.getenv('DATABASE_PASSWORD', 'Pfw02967+890,/')),
+            "PASSWORD": config('DB_PASSWORD', default=os.getenv('DATABASE_PASSWORD', 'chOy6y5b9gqVYs905l')),
             "HOST": config('DB_HOST', default=os.getenv('DATABASE_HOST', 'app_db')),
             "PORT": config('DB_PORT', default=os.getenv('DATABASE_PORT', 5432), cast=int),
             'CONN_MAX_AGE': 600,

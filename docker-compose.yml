@@ -19,6 +19,8 @@ services:
   server:
     image: judge0/judge0:1.13.1
     privileged: true
+    cap_add:
+      - SYS_ADMIN
     container_name: judge0_server
     ports:
       - "2358:2358"
@@ -26,7 +28,7 @@ services:
       POSTGRES_HOST: db
       POSTGRES_DB: judge0_db
       POSTGRES_USER: judge0
-      POSTGRES_PASSWORD: Pfw02967+890,/
+      POSTGRES_PASSWORD: PA1hzrZ2n2giz8s4Xu
       REDIS_HOST: redis
       LANG: en_US.UTF-8
       LANGUAGE: en_US:en
@@ -39,19 +41,28 @@ services:
     volumes:
       - /home/paul/Compete/box:/box
   workers:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
     build:
       context: .
       dockerfile: Dockerfile.workers
     container_name: judge0_workers
-    restart: always
-    user: root
     cgroup: host
+    runtime: runsc
+    restart: always
     privileged: true
     cap_add:
-      - SYS_ADMIN
+      - SYS_ADMIN # Needed to mount namespaces (avoid using if gvisor isn't implemented)
+      - CHOWN # So Judge0 can modify file permissions in /box
+      - SETUID # So the sandbox user can be switched to
+      - SETGID
+      - DAC_OVERRIDE # Allows isolate to bypass read & write checks (avoid using if possible to mitigate security risks)
     security_opt:
-      - seccomp:unconfined
-      - apparmor:unconfined
+      - label:disable # Disables apparmor and selinux for this container only
+      - no-new-privileges:true # Prevents escalation to root
     depends_on:
       - server
       - db
@@ -60,20 +71,15 @@ services:
       POSTGRES_HOST: db
       POSTGRES_DB: judge0_db
       POSTGRES_USER: judge0
-      POSTGRES_PASSWORD: Pfw02967+890,/
+      POSTGRES_PASSWORD: PA1hzrZ2n2giz8s4Xu
       REDIS_HOST: redis
       QUEUE: "*"
-      DOCKER_HOST: unix:///var/run/docker.sock
       LANG: en_US.UTF-8
       LANGUAGE: en_US:en
       LC_ALL: en_US.UTF-8
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
       - /home/paul/Compete/box:/box
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
-      - /dev:/dev
-      - ./judge0.conf:/etc/judge0.conf:ro
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
       - /var/local/lib/isolate:/var/local/lib/isolate
     networks:
       - judge0-network
@@ -88,7 +94,7 @@ services:
     environment:
       - POSTGRES_DB=compete_db
       - POSTGRES_USER=compete_user
-      - POSTGRES_PASSWORD=Pfw02967+890,/
+      - POSTGRES_PASSWORD=chOy6y5b9gqVYs905l
     volumes:
       - app_postgres_data:/var/lib/postgresql/data
     networks:
@@ -99,7 +105,7 @@ services:
     environment:
       - POSTGRES_DB=judge0_db
       - POSTGRES_USER=judge0
-      - POSTGRES_PASSWORD=Pfw02967+890,/
+      - POSTGRES_PASSWORD=PA1hzrZ2n2giz8s4Xu
     volumes:
       - judge0_postgres_data:/var/lib/postgresql/data
     networks:
@@ -109,6 +115,7 @@ networks:
     driver: bridge
   judge0-network:
     driver: bridge
+    internal: true
 volumes:
   app_postgres_data:
   judge0_postgres_data:
