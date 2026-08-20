@@ -183,8 +183,8 @@ This project is available for educational and non-commercial use.
 
 ## 👤 Author
 
-**Paul-W-0**
-- GitHub: [@Paul-W-0](https://github.com/Paul-W-0)
+**PaulWilkerson**
+- GitHub: [@PaulWilkerson](https://github.com/PaulWilkerson)
 
 ## 🙏 Acknowledgments
 
