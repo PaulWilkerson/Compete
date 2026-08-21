@@ -37,6 +37,7 @@ local_settings.py
 .env
 .env.local
 .env.production
+.env.staging
 .env.*.local
 
 # Virtual Environment
@@ -67,11 +68,25 @@ logs/
 *.bak
 *.backup
 
-# Security
+# Security & Credentials
 *.pem
 *.key
 *.crt
 *.cer
+secrets/
+credentials/
+
+# Configuration files with secrets
+.env.production
+.env.staging
+docker-compose.override.yml
+judge0.conf
+*.conf
+
+# Database dumps and backups
+*.sql
+*.sql.gz
+*.dump
 
 # OS
 Thumbs.db
