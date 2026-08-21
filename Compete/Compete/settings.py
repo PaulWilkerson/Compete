@@ -62,7 +62,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default='hlu5x#_-h*hs7ztznl2zt^_oo2z0#n1@ek3b9x-)+i6s-dvpdv')
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-me-in-production')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
@@ -123,11 +123,11 @@ if config('USE_POSTGRESQL', default=True, cast=bool):
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": config('DB_NAME', default=os.getenv('DATABASE_NAME', 'compete_db')),
-            "USER": config('DB_USER', default=os.getenv('DATABASE_USER', 'compete_user')),
-            "PASSWORD": config('DB_PASSWORD', default=os.getenv('DATABASE_PASSWORD', 'chOy6y5b9gqVYs905l')),
-            "HOST": config('DB_HOST', default=os.getenv('DATABASE_HOST', 'app_db')),
-            "PORT": config('DB_PORT', default=os.getenv('DATABASE_PORT', 5432), cast=int),
+            "NAME": config('DB_NAME', default='compete_db'),
+            "USER": config('DB_USER', default='compete_user'),
+            "PASSWORD": config('DB_PASSWORD', default=''),
+            "HOST": config('DB_HOST', default='app_db'),
+            "PORT": config('DB_PORT', default=5432, cast=int),
             'CONN_MAX_AGE': 600,
             'OPTIONS': {
                 'connect_timeout': 10,
@@ -198,8 +198,8 @@ if config('USE_SMTP_EMAIL', default=True, cast=bool):
     EMAIL_HOST = config('EMAIL_HOST', default='smtp.postmarkapp.com')
     EMAIL_PORT = config('EMAIL_PORT', default=2525, cast=int)
     EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
-    EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='39b7c6fa-45ae-4780-83b3-1daa9032f63b')
-    EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='39b7c6fa-45ae-4780-83b3-1daa9032f63b')
+    EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+    EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
     EMAIL_TIMEOUT = 10
 else:
     # Development: print emails to console
@@ -290,7 +290,7 @@ LOGGING = {
 }
 
 # Admin Configuration
-ADMINS = [('Admin', config('ADMIN_EMAIL', default='competectfcompetitions@gmail.com'))]
+ADMINS = [('Admin', config('ADMIN_EMAIL', default='admin@example.com'))]
 MANAGERS = ADMINS
 
 # Default primary key field type
