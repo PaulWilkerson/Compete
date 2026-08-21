@@ -374,7 +374,7 @@ CSRF_COOKIE_SECURE=True
 ### Before
 ```python
 # settings.py
-SECRET_KEY = "hlu5x#_-h*hs7ztznl2zt^_oo2z0#n1@ek3b9x-)+i6s-dvpdv"  # 🔴 EXPOSED
+SECRET_KEY = ""  # 🔴 EXPOSED
 DEBUG = False  # ⚠️ Hardcoded
 ALLOWED_HOSTS = ['*']  # 🔴 INSECURE
 DATABASES = { 'default': { 'ENGINE': 'sqlite3' } }  # 🔴 NOT SCALABLE
