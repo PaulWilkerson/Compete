@@ -179,7 +179,7 @@ All critical security issues have been resolved. The application is ready for pr
 
 ## 📄 License
 
-This project is available for educational and non-commercial use.
+This project is licensed under the MIT license.
 
 ## 👤 Author
 
