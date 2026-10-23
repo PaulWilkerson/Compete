@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Challenge - {{ ctf.title }}{% endblock %}
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui segment ctf-card">
+        <h1 class="ui header">{% if mode == "create" %}Add a challenge{% else %}Edit challenge{% endif %}</h1>
+        <p>For <a href="{% url 'hosted_ctf_detail' ctf.slug %}">{{ ctf.title }}</a>. The flag is only visible to you.</p>
+        <form class="ui form" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="field {% if field.errors %}error{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% for error in field.errors %}<div class="ui pointing red label">{{ error }}</div>{% endfor %}
+                </div>
+            {% endfor %}
+            <button class="ui primary button" type="submit">Save challenge</button>
+            <a class="ui button" href="{% url 'hosted_ctf_detail' ctf.slug %}">Back</a>
+        </form>
+        {% if mode == "edit" %}
+            <form method="post" action="{% url 'hosted_ctf_challenge_delete' ctf.slug challenge.id %}" style="margin-top: 1rem;">
+                {% csrf_token %}
+                <button class="ui red basic button" type="submit">Delete challenge</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

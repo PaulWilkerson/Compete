@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}My competitions - Compete CTF{% endblock %}
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui segment ctf-card">
+        <h1 class="ui header">My competitions</h1>
+        <p>Available payout balance: <strong>${{ available }}</strong></p>
+        <a class="ui primary button" href="{% url 'hosted_ctf_create' %}">Host another</a>
+        <a class="ui button" href="{% url 'hosted_ctf_earnings' %}">Earnings</a>
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th>Competition</th>
+                    <th>Status</th>
+                    <th>Fee</th>
+                    <th>Challenges</th>
+                    <th>Players</th>
+                    <th>Your net</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ctf in competitions %}
+                    <tr>
+                        <td><a href="{% url 'hosted_ctf_detail' ctf.slug %}">{{ ctf.title }}</a></td>
+                        <td>{{ ctf.get_status_display }}</td>
+                        <td>${{ ctf.entry_fee }}</td>
+                        <td>{{ ctf.challenge_count }}</td>
+                        <td>{{ ctf.player_count }}</td>
+                        <td>${{ ctf.net|default:"0.00" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6">You have not hosted a competition yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

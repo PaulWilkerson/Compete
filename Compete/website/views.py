@@ -9,8 +9,14 @@ from .forms import CompetitorSignup, UpdateProfile
 from .models import Account, SolvedChallenge
 def home(request):
     try:
-        return render(request, 'home.html', {  } )
-    except:
+        from marketplace.models import HostedCTF
+        open_ctfs = (
+            HostedCTF.objects.filter(status=HostedCTF.STATUS_OPEN)
+            .select_related("owner")
+            .order_by("-created_at")[:6]
+        )
+        return render(request, 'home.html', {"open_ctfs": open_ctfs})
+    except Exception:
         return render(request, '404.html', {  } )
 @csrf_protect
 def signup(request):

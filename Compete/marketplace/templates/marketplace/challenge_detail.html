@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ challenge.title }} - {{ ctf.title }}{% endblock %}
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui segment ctf-card">
+        <a href="{% url 'hosted_ctf_detail' ctf.slug %}">← {{ ctf.title }}</a>
+        <h1 class="ui header">{{ challenge.title }}</h1>
+        <div class="ui labels">
+            <span class="ui label">{{ challenge.get_category_display }}</span>
+            <span class="ui label">{{ challenge.difficulty }}</span>
+            <span class="ui label">{{ challenge.points }} pts</span>
+            {% if solved %}<span class="ui green label">Solved</span>{% endif %}
+        </div>
+        {% if can_play %}
+            <div class="ui message" style="margin-top: 1rem;">{{ challenge.description|linebreaksbr }}</div>
+            {% if not is_owner %}
+                <form class="ui form" method="post" action="{% url 'hosted_ctf_submit' ctf.slug challenge.id %}">
+                    {% csrf_token %}
+                    <div class="field">
+                        <label for="id_flag">Flag</label>
+                        {{ form.flag }}
+                    </div>
+                    <button class="ui primary button" type="submit" {% if solved %}disabled{% endif %}>Submit flag</button>
+                </form>
+            {% else %}
+                <p>Players submit flags here. Your flag stays on the edit page.</p>
+                <a class="ui button" href="{% url 'hosted_ctf_challenge_edit' ctf.slug challenge.id %}">Edit challenge</a>
+            {% endif %}
+        {% else %}
+            <div class="ui warning message" style="margin-top: 1rem;">
+                Enter this competition to read the challenge and submit a flag.
+            </div>
+            {% if user.is_authenticated and ctf.is_accepting_entries %}
+                <form method="post" action="{% url 'hosted_ctf_join' ctf.slug %}">
+                    {% csrf_token %}
+                    <button class="ui green button" type="submit">
+                        {% if ctf.entry_fee > 0 %}Pay ${{ ctf.entry_fee }} and enter{% else %}Enter for free{% endif %}
+                    </button>
+                </form>
+            {% elif not user.is_authenticated %}
+                <a class="ui primary button" href="{% url 'login' %}">Log in to enter</a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

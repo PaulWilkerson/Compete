@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     'cyber',
     'programming',
     'website',
+    'marketplace',
 ]
 
 MIDDLEWARE = [
@@ -297,3 +298,10 @@ MANAGERS = ADMINS
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #Judge0 Config
 JUDGE0_API_URL = "http://server:2358"
+
+# Hosted competitions. Percent of each paid entry fee kept by Compete (0-50).
+PLATFORM_COMMISSION_PERCENT = config('PLATFORM_COMMISSION_PERCENT', default=15, cast=int)
+MAX_ENTRY_FEE = config('MAX_ENTRY_FEE', default='500.00')
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY', default='') or ''
+STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET', default='') or ''
+

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Platform commissions - Compete CTF{% endblock %}
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui segment ctf-card">
+        <h1 class="ui header">Platform commissions</h1>
+        <p>Current rate: {{ commission_percent }}% of every paid entry. Staff only.</p>
+        <div class="ui three statistics">
+            <div class="statistic">
+                <div class="value">${{ commission_total }}</div>
+                <div class="label">Commission earned</div>
+            </div>
+            <div class="statistic">
+                <div class="value">${{ gross_total }}</div>
+                <div class="label">Gross entry fees</div>
+            </div>
+            <div class="statistic">
+                <div class="value">${{ host_total }}</div>
+                <div class="label">Owed to hosts</div>
+            </div>
+        </div>
+        <h2 class="ui header">Pending host payouts</h2>
+        <table class="ui celled table">
+            <thead><tr><th>Host</th><th>Amount</th><th>Note</th><th></th></tr></thead>
+            <tbody>
+                {% for payout in pending_payouts %}
+                    <tr>
+                        <td>{{ payout.host.username }}</td>
+                        <td>${{ payout.amount }}</td>
+                        <td>{{ payout.note }}</td>
+                        <td>
+                            <form method="post" action="{% url 'hosted_ctf_payout_resolve' payout.id %}">
+                                {% csrf_token %}
+                                <button class="ui green button" name="action" value="pay" type="submit">Mark paid</button>
+                                <button class="ui button" name="action" value="reject" type="submit">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4">No pending payouts.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h2 class="ui header">Paid entries</h2>
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th>When</th>
+                    <th>Competition</th>
+                    <th>Host</th>
+                    <th>Player</th>
+                    <th>Gross</th>
+                    <th>Commission</th>
+                    <th>Host share</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in recent %}
+                    <tr>
+                        <td>{{ entry.paid_at }}</td>
+                        <td>{{ entry.ctf.title }}</td>
+                        <td>{{ entry.ctf.owner.username }}</td>
+                        <td>{{ entry.player.username }}</td>
+                        <td>${{ entry.gross_amount }}</td>
+                        <td>${{ entry.commission_amount }}</td>
+                        <td>${{ entry.host_amount }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="7">No paid entries yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

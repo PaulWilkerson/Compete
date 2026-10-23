@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{% if mode == "create" %}Host a CTF{% else %}Edit {{ ctf.title }}{% endif %} - Compete CTF{% endblock %}
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui segment ctf-card">
+        <h1 class="ui header">{% if mode == "create" %}Host a competition{% else %}Edit {{ ctf.title }}{% endif %}</h1>
+        <div class="ui info message">
+            Compete keeps <strong>{{ commission_percent }}%</strong> of every paid entry fee.
+            You keep the rest as a balance you can request as a payout.
+            Free competitions are allowed. Save as a draft, add at least one challenge, then open it.
+        </div>
+        <form class="ui form" method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="ui error message" style="display: block;">{{ form.non_field_errors }}</div>
+            {% endif %}
+            {% for field in form %}
+                <div class="field {% if field.errors %}error{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+                    {% for error in field.errors %}<div class="ui pointing red label">{{ error }}</div>{% endfor %}
+                </div>
+            {% endfor %}
+            <button class="ui primary button" type="submit">Save</button>
+            {% if ctf %}
+                <a class="ui button" href="{% url 'hosted_ctf_detail' ctf.slug %}">Cancel</a>
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock %}

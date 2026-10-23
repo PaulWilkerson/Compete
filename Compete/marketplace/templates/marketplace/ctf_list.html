@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Competitions - Compete CTF{% endblock %}
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui segment ctf-card">
+        <div class="ui stackable grid">
+            <div class="ten wide column">
+                <h1 class="ui header">
+                    <i class="flag icon"></i>
+                    Hosted competitions
+                </h1>
+                <p>
+                    Run your own CTF. Set an entry fee and keep the payout.
+                    Compete keeps {{ commission_percent }}% of every paid entry.
+                </p>
+            </div>
+            <div class="six wide column" style="text-align: right;">
+                {% if user.is_authenticated %}
+                    <a class="ui primary button" href="{% url 'hosted_ctf_create' %}">
+                        <i class="plus icon"></i> Host a CTF
+                    </a>
+                {% else %}
+                    <a class="ui primary button" href="{% url 'signup' %}">Sign up to host</a>
+                {% endif %}
+            </div>
+        </div>
+        <form class="ui form" method="get">
+            <div class="fields">
+                <div class="ten wide field">
+                    <input type="text" name="q" value="{{ query }}" placeholder="Search competitions">
+                </div>
+                <div class="four wide field">
+                    <select name="status" class="ui dropdown">
+                        <option value="open" {% if status == "open" %}selected{% endif %}>Open</option>
+                        <option value="closed" {% if status == "closed" %}selected{% endif %}>Closed</option>
+                        <option value="all" {% if status == "all" %}selected{% endif %}>Open and closed</option>
+                    </select>
+                </div>
+                <div class="two wide field">
+                    <button class="ui button" type="submit">Filter</button>
+                </div>
+            </div>
+        </form>
+        <div class="ui divided items">
+            {% for ctf in competitions %}
+                <div class="item">
+                    <div class="content">
+                        <a class="header" href="{% url 'hosted_ctf_detail' ctf.slug %}">{{ ctf.title }}</a>
+                        <div class="meta">
+                            Hosted by {{ ctf.owner.username }} · {{ ctf.get_category_display }} · {{ ctf.get_status_display }}
+                        </div>
+                        <div class="description">{{ ctf.summary }}</div>
+                        <div class="extra">
+                            {% if ctf.entry_fee > 0 %}
+                                <span class="ui green label">${{ ctf.entry_fee }} entry</span>
+                            {% else %}
+                                <span class="ui blue label">Free</span>
+                            {% endif %}
+                            <span class="ui label">{{ ctf.challenge_count }} challenges</span>
+                            <span class="ui label">{{ ctf.player_count }} players</span>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="ui message">No competitions match that filter yet.</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

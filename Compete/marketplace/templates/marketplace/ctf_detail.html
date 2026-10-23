@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}{{ ctf.title }} - Compete CTF{% endblock %}
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui segment ctf-card">
+        <div class="ui stackable grid">
+            <div class="eleven wide column">
+                <h1 class="ui header">{{ ctf.title }}</h1>
+                <div class="ui labels">
+                    <span class="ui label">{{ ctf.get_status_display }}</span>
+                    <span class="ui label">{{ ctf.get_category_display }}</span>
+                    <span class="ui label">{{ player_count }} players</span>
+                    {% if ctf.entry_fee > 0 %}
+                        <span class="ui green label">${{ ctf.entry_fee }} entry</span>
+                    {% else %}
+                        <span class="ui blue label">Free entry</span>
+                    {% endif %}
+                </div>
+                <p style="margin-top: 1rem;">{{ ctf.summary }}</p>
+                <div class="ui message">{{ ctf.description|linebreaksbr }}</div>
+                <p class="meta">Hosted by <a href="{% url 'user_profile' ctf.owner.username %}">{{ ctf.owner.username }}</a></p>
+                {% if ctf.entry_fee > 0 %}
+                    <p>
+                        Of each ${{ quote.gross }} entry, the host keeps ${{ quote.host_net }}
+                        and Compete keeps ${{ quote.commission }} ({{ quote.percent }}%).
+                    </p>
+                {% endif %}
+            </div>
+            <div class="five wide column">
+                <a class="ui button fluid" href="{% url 'hosted_ctf_scoreboard' ctf.slug %}">
+                    <i class="trophy icon"></i> Scoreboard
+                </a>
+                {% if is_owner %}
+                    <a class="ui primary button fluid" style="margin-top: 0.5rem;" href="{% url 'hosted_ctf_edit' ctf.slug %}">Edit competition</a>
+                    <a class="ui button fluid" style="margin-top: 0.5rem;" href="{% url 'hosted_ctf_challenge_create' ctf.slug %}">Add challenge</a>
+                    <a class="ui button fluid" style="margin-top: 0.5rem;" href="{% url 'hosted_ctf_earnings' %}">Earnings</a>
+                {% elif entry and entry.status == "paid" %}
+                    <div class="ui positive message">You're entered.</div>
+                {% elif user.is_authenticated %}
+                    {% if ctf.is_accepting_entries %}
+                        <form method="post" action="{% url 'hosted_ctf_join' ctf.slug %}" style="margin-top: 0.5rem;">
+                            {% csrf_token %}
+                            <button class="ui green button fluid" type="submit">
+                                {% if ctf.entry_fee > 0 %}Pay ${{ ctf.entry_fee }} and enter{% else %}Enter for free{% endif %}
+                            </button>
+                        </form>
+                        {% if entry and entry.status == "pending" and test_payments %}
+                            <form method="post" action="{% url 'hosted_ctf_test_pay' ctf.slug %}" style="margin-top: 0.5rem;">
+                                {% csrf_token %}
+                                <button class="ui orange button fluid" type="submit">Record test payment</button>
+                            </form>
+                        {% endif %}
+                    {% else %}
+                        <div class="ui warning message">Entries are closed.</div>
+                    {% endif %}
+                {% else %}
+                    <a class="ui primary button fluid" style="margin-top: 0.5rem;" href="{% url 'login' %}">Log in to enter</a>
+                {% endif %}
+            </div>
+        </div>
+        <h2 class="ui header">Challenges</h2>
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Difficulty</th>
+                    <th>Points</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for challenge in challenges %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'hosted_challenge_detail' ctf.slug challenge.id %}">{{ challenge.title }}</a>
+                            {% if challenge.id in solved_ids %}<span class="ui green label">Solved</span>{% endif %}
+                        </td>
+                        <td>{{ challenge.get_category_display }}</td>
+                        <td>{{ challenge.difficulty }}</td>
+                        <td>{{ challenge.points }}</td>
+                        <td>
+                            {% if is_owner %}
+                                <a href="{% url 'hosted_ctf_challenge_edit' ctf.slug challenge.id %}">Edit</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5">No challenges yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Scoreboard - {{ ctf.title }}{% endblock %}
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui segment ctf-card">
+        <a href="{% url 'hosted_ctf_detail' ctf.slug %}">← {{ ctf.title }}</a>
+        <h1 class="ui header">Scoreboard</h1>
+        <table class="ui celled table">
+            <thead>
+                <tr><th>Rank</th><th>Player</th><th>Solves</th><th>Points</th></tr>
+            </thead>
+            <tbody>
+                {% for row in board %}
+                    <tr>
+                        <td>{{ row.rank }}</td>
+                        <td><a href="{% url 'user_profile' row.username %}">{{ row.username }}</a></td>
+                        <td>{{ row.solves }}</td>
+                        <td>{{ row.points }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4">No players yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

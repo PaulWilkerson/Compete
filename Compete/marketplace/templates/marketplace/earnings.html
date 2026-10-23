@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Earnings - Compete CTF{% endblock %}
+{% block content %}
+<div class="ui container main-container">
+    <div class="ui segment ctf-card">
+        <h1 class="ui header">Host earnings</h1>
+        <div class="ui three statistics">
+            <div class="statistic">
+                <div class="value">${{ earned }}</div>
+                <div class="label">Lifetime earnings</div>
+            </div>
+            <div class="statistic">
+                <div class="value">${{ available }}</div>
+                <div class="label">Available</div>
+            </div>
+            <div class="statistic">
+                <div class="value">${{ commission_taken }}</div>
+                <div class="label">Commission kept by Compete</div>
+            </div>
+        </div>
+        <p>The current rate is {{ commission_percent }}% of each paid entry. It is locked onto the entry at payment time.</p>
+        <h2 class="ui header">Request a payout</h2>
+        <form class="ui form" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="field {% if field.errors %}error{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% for error in field.errors %}<div class="ui pointing red label">{{ error }}</div>{% endfor %}
+                </div>
+            {% endfor %}
+            <button class="ui primary button" type="submit">Request payout</button>
+        </form>
+        <h2 class="ui header">Recent earnings</h2>
+        <table class="ui celled table">
+            <thead>
+                <tr><th>When</th><th>Competition</th><th>Player</th><th>Your share</th></tr>
+            </thead>
+            <tbody>
+                {% for line in lines %}
+                    <tr>
+                        <td>{{ line.created_at }}</td>
+                        <td>{% if line.ctf %}{{ line.ctf.title }}{% else %}—{% endif %}</td>
+                        <td>{% if line.entry %}{{ line.entry.player.username }}{% else %}—{% endif %}</td>
+                        <td>${{ line.amount }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4">No paid entries yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h2 class="ui header">Payout requests</h2>
+        <table class="ui celled table">
+            <thead><tr><th>When</th><th>Amount</th><th>Status</th><th>Note</th></tr></thead>
+            <tbody>
+                {% for payout in payouts %}
+                    <tr>
+                        <td>{{ payout.requested_at }}</td>
+                        <td>${{ payout.amount }}</td>
+                        <td>{{ payout.get_status_display }}</td>
+                        <td>{{ payout.note }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4">No payout requests.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

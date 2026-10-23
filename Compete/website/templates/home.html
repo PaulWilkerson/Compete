@@ -62,6 +62,45 @@
         </div>
     </div>
 
+    <div class="ui segment ctf-card" style="margin-top: 30px;">
+        <h2 class="ui header">
+            <i class="flag icon"></i>
+            Hosted competitions
+        </h2>
+        <div class="ui divider"></div>
+        <p>
+            The official CLI, cyber, and programming tracks stay up.
+            Anyone can also host their own CTF, write the challenges, and charge an entry fee.
+            Compete keeps a commission on every paid entry. The host keeps the rest.
+        </p>
+        <div class="ui three column stackable grid">
+            {% for ctf in open_ctfs %}
+                <div class="column">
+                    <div class="ui fluid card challenge-card">
+                        <div class="content">
+                            <a class="header" href="{% url 'hosted_ctf_detail' ctf.slug %}">{{ ctf.title }}</a>
+                            <div class="meta">by {{ ctf.owner.username }}</div>
+                            <div class="description">{{ ctf.summary }}</div>
+                        </div>
+                        <div class="extra content">
+                            {% if ctf.entry_fee > 0 %}${{ ctf.entry_fee }} entry{% else %}Free entry{% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="column">
+                    <div class="ui message">No open hosted competitions yet.</div>
+                </div>
+            {% endfor %}
+        </div>
+        <div style="margin-top: 1rem;">
+            <a class="ui primary button" href="{% url 'hosted_ctf_list' %}">Browse competitions</a>
+            {% if user.is_authenticated %}
+                <a class="ui button" href="{% url 'hosted_ctf_create' %}">Host a CTF</a>
+            {% endif %}
+        </div>
+    </div>
+
     <!-- Challenge Categories -->
     <div class="ui segment ctf-card" style="margin-top: 50px;">
         <h2 class="ui header">

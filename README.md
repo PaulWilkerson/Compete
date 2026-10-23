@@ -5,6 +5,8 @@ A competitive Capture The Flag (CTF) web application where users solve challenge
 ## 🎯 Features
 
 - **Multiple Challenge Categories**: CLI, Cyber Security, and Programming
+- **Hosted competitions**: Users create their own CTFs and challenges, instead of only playing the official tracks
+- **Entry fees and commission**: Hosts set an entry fee and keep the payout. Compete keeps a commission (default 15%) on every paid entry
 - **User Authentication**: Secure signup, login, and password reset
 - **Progress Tracking**: Track solved challenges and earned points
 - **Leaderboards**: Compete with other players globally
@@ -109,6 +111,7 @@ Compete/
 ├── cli/                 # CLI challenges app
 ├── cyber/               # Cyber security challenges app
 ├── programming/         # Programming challenges app
+├── marketplace/         # User-hosted CTFs, entry fees, commissions
 ├── website/             # Main website app (auth, profiles)
 ├── templates/           # HTML templates
 ├── staticfiles/         # Collected static files (production)
@@ -134,7 +137,26 @@ USE_POSTGRESQL=False
 
 # Email (optional for development)
 USE_SMTP_EMAIL=False
+
+# Hosted competitions
+# Percent of each paid entry kept by Compete. Integer from 0 to 50. Default 15.
+PLATFORM_COMMISSION_PERCENT=15
+MAX_ENTRY_FEE=500.00
+# Leave blank in development. Paid entries then use a test-payment button when DEBUG=True.
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
 ```
+
+## Hosted competitions
+
+Official CLI, cyber, and programming challenges stay as they are. A separate aggregator lives at `/ctfs/`.
+
+1. A signed-in user hosts a competition, writes challenges (title, description, points, flag), and sets an entry fee. Free events are allowed.
+2. The competition stays a draft until it has at least one challenge and the host opens it.
+3. Other users pay the entry fee to see challenge text and submit flags. Hosts already have access and do not pay themselves.
+4. On each paid entry the fee is split at the current `PLATFORM_COMMISSION_PERCENT` and stored on the entry, so a later rate change does not rewrite history.
+5. The host's share shows up under **Earnings**. They can request a payout. Staff review those requests at **Competitions → Commissions**, which is also where Compete's commission total lives.
+6. Card payments use Stripe Checkout. Set `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET`, and point Stripe at `https://your-domain/ctfs/stripe/webhook/`. With `DEBUG=True` and no Stripe key, a "Record test payment" button simulates the same ledger split. That button is off when `DEBUG=False`.
 
 For production configuration, see [.env.example](Compete/.env.example).
 
